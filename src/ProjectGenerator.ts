@@ -1,10 +1,9 @@
 import path from "path";
 import fs from "fs";
 import { generate as generateVueModularArch} from "./frontend/vue-vite/generate.ts";
+import type ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
+import { VueModularArchitecture } from "seon-lib-implementation";
 
-import SEON from "seon-lib-implementation";
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import VueModularArchitecture from "seon-lib-implementation/dist/prefabs/sintaxes/typescript/VueModularArchitecture";
 
 export class ProjectGenerator {
     private project: ProjectAbstraction;
@@ -14,9 +13,9 @@ export class ProjectGenerator {
     }
 
     public generate(): void {
-        const projectPath = path.join(process.cwd(), this.project.getName());
+        const projectPath = path.join(process.cwd(), this.project.getProjectName());
 
-        if (this.project.getSpecifications() instanceof VueModularArchitecture) {
+        if (this.project.getSpecifications().architecture instanceof VueModularArchitecture) {
             fs.mkdirSync(projectPath, { recursive: true });
             generateVueModularArch(this.project, projectPath);
         }
