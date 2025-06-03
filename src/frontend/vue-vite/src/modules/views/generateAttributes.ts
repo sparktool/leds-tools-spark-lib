@@ -1,4 +1,4 @@
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction"
+import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction.js"
 
 // Nome: nome.value, 
 // Descricao: descricao.value

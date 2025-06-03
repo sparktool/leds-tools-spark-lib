@@ -1,7 +1,7 @@
 import fs from "fs";
-import { expandToString } from "../../../template-string";
+import { expandToString } from "../../../template-string.js";
 import path from "path";
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
+import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
 
 
 export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {

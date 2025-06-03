@@ -1,8 +1,8 @@
 import fs from "fs"
-import { expandToString } from "../../../template-string";
+import { expandToString } from "../../../template-string.js";
 import path from "path"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction";
+import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
+import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction.js";
 
 export function generate(project_abstraction: ProjectAbstraction, cls: ClassAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, `${cls.getName().toLowerCase()}.ts`), generateApi(project_abstraction, cls))

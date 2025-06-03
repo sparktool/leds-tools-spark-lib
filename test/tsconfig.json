@@ -8,5 +8,8 @@
     "target": "es6",
     "moduleResolution": "Node",
   },
+  "ts-node": {
+    "experimentalResolver": true
+  },
   "exclude": ["dist"]
 }

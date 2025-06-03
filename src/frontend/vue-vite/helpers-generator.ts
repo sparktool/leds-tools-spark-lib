@@ -1,8 +1,8 @@
 import fs from "fs";
-import { expandToString } from "./template-string.ts";
+import { expandToString } from "./template-string.js";
 import path from "path";
 import { generate as generatePackageLock} from "./packagelock-generator.js"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
+import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
 
 export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
 
@@ -283,7 +283,7 @@ function generateIndex(project_abstraction: ProjectAbstraction): string {
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/src/assets/style.css">
-    <title>${project_abstraction.getName()}</title>
+    <title>${project_abstraction.getProjectName()}</title>
   </head>
   <body>
     <div id="app"></div>

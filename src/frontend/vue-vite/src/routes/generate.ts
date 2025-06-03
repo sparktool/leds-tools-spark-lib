@@ -11,8 +11,8 @@ export function generate(project_abstraction: ProjectAbstraction, target_folder:
 function generateIndex(project_abstraction: ProjectAbstraction, target_folder: string): string {
     const classList : ClassAbstraction[] = []
 
-    for (const pkg of project_abstraction.getCorePackages()) {
-        for (const clazz of pkg.getClasses()){
+    for (const pkg of project_abstraction.getCoresPackages()) {
+        for (const clazz of pkg.getPackageLevelClasses()){
             classList.push(clazz)
         }
     }

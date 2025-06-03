@@ -1,16 +1,16 @@
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import { expandToString } from "./template-string.ts";
+import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
+import { expandToString } from "./template-string.js";
 
 export function generate(project_abstraction: ProjectAbstraction): string {
   return expandToString`
 {
-  "name": "${project_abstraction.getName()}",
+  "name": "${project_abstraction.getProjectName()}",
   "version": "0.0.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "${project_abstraction.getName()}",
+      "name": "${project_abstraction.getProjectName()}",
       "version": "0.0.0",
       "dependencies": {
         "@vueuse/integrations": "^13.1.0",
