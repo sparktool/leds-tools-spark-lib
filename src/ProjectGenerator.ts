@@ -1,9 +1,8 @@
 import path from "path";
 import fs from "fs";
-import { generate as generateVueModularArch} from "./frontend/vue-vite/generate.ts";
+import { generate as generateVueModularArch} from "./frontend/vue-vite/generate";
 import type ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
 import { VueModularArchitecture } from "seon-lib-implementation";
-
 
 export class ProjectGenerator {
     private project: ProjectAbstraction;

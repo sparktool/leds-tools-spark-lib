@@ -1,4 +1,4 @@
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
+import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
 import SEON from "seon-lib-implementation";
 import fs from "fs";
 import path from "path";
