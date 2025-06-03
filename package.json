@@ -1,14 +1,14 @@
 {
   "dependencies": {
-    "commitizen": "^4.3.1",
-    "seon-lib-implementation": "^0.0.32"
+    "seon-lib-implementation": "^0.0.5"
   },
   "devDependencies": {
+    "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0"
   },
   "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+  "commitizen": {
+    "path": "./node_modules/cz-conventional-changelog"
   }
+}
 }
