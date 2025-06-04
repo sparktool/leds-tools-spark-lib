@@ -1,4 +1,4 @@
-import { beforeAll, expect, test, vi } from "vitest";
+import { afterAll, beforeAll, expect, test, vi } from "vitest";
 import {generate} from "../src/frontend/vue-vite/generate.js";
 import * as Module from "../src/frontend/vue-vite/generate.js";
 // import PackageAbstraction from "seon-lib-implementation/dist/abstractions/project/PackageAbstraction.js";
@@ -35,26 +35,31 @@ let project: ProjectAbstraction = new ProjectAbstraction('Test', "Testes dos ger
 );
 
 
-test(`Test File Names and Their Contents`, async () => {
-    const generateSpy = vi.spyOn(Module, 'generate'); 
-    
-    // using a promise to wait for all generates to finish
-    await new Promise<void>((resolve, reject) => {
-        try {
-            generate(project, __dirname);
-        } catch (error) {
-            console.error('Generate Error:', error);
-            reject(error); // if stop test hee
-        }
+const frontEndPath = path.join(__dirname, 'frontend');
+const publicPath = path.join(frontEndPath, 'public');
+const publicAssetsPath = path.join(publicPath, 'assets');
+const publicImagesPath = path.join(publicAssetsPath, 'images');
+const srcPath = path.join(frontEndPath, 'src');
+const srcComponentsPath = path.join(srcPath, 'components');
+const srcIconsComponentsPath = path.join(srcComponentsPath, 'icons');
+const sidenavComponentsSrcPath = path.join(srcComponentsPath, 'sidenav'); // TODO: refazer tudo, usando testes realmente unitários para cada um dos arquivos e pastas (usar um test foreach para evitar repetição de código)
 
-        setTimeout(() => {
-            resolve();  // simulating execution
-        }, 4000);  // 4 s to (5s gives timeout) 
-    });  
-    expect(generateSpy).toHaveBeenCalledWith(project, __dirname);
+
+beforeAll(() => {
+    generate(project, __dirname);
+});
+
+
+afterAll(() => {
+    // deleteFolderRecursive(path.join(__dirname, 'frontend'));
+});
+
+
+test(`Test folder names`);
+
+test(`Test File Names and Their Contents`, async () => {
 
     // separar por arquivos (??) (queronemsabevodeixaoextremegohorsedepoisajeitasitremkkkkkkk)
-    const frontEndPath = path.join(__dirname, 'frontend');
     // expect(() => checkIsDir(frontEndPath)).not.toThrow();
     try{
         checkIsDir(frontEndPath);
@@ -74,20 +79,16 @@ test(`Test File Names and Their Contents`, async () => {
 
 
     // pasta, subpastas e arquivos de public
-    const publicPath = path.join(frontEndPath, 'public');
     checkIsDir(publicPath);
 
     checkFileContent(path.join(publicPath, '_redirects'), "/*    /index.html   200");
     checkFileContent(path.join(publicPath, '.env'), "VITE_API_URL=\"/\"");
     checkFileContent(path.join(publicPath, 'favicon.png')) // nao tem nada nesse arquivo, então nao precisa verificar o conteudo também
     // assets e images (que não possuem nenhum arquivo :p )
-    const publicAssetsPath = path.join(publicPath, 'assets');
     checkIsDir(publicPath);
-    const publicImagesPath = path.join(publicAssetsPath, 'images');
     checkIsDir(publicImagesPath); 
 
     // agora, para o conteúdo de src
-    const srcPath = path.join(frontEndPath, 'src');
 
     // usando command para rodar arquivos e algumas subpastas de src
     const invokerSrc = new SrcInvoker();
@@ -99,22 +100,12 @@ test(`Test File Names and Their Contents`, async () => {
     const srcViewsPath = new ViewsCommand(receiverSrc, 'stores');
     invokerSrc.run(srcViewsPath);
 
-
-    // nessa pasta filha, e na pasta filha dela, não há arquivos ( : ) )
-    const srcAssetsPath = path.join(srcPath, 'assets');
-    checkIsDir(srcAssetsPath);
-    const srcImagesPath = path.join(srcAssetsPath, 'images');
-    checkIsDir(srcImagesPath);
-
     // components de src
-    const srcComponentsPath = path.join(srcPath, 'src');
     checkIsDir(srcComponentsPath);
-    const srcAppsPath = path.join(srcComponentsPath, 'apps');
-    checkIsDir(srcAppsPath);
-    const ecommercePath = path.join(srcAppsPath, 'ecommerce');
-    checkIsDir(ecommercePath);
+    checkIsDir(srcIconsComponentsPath);
+    checkIsDir(sidenavComponentsSrcPath);
 
-    const listingPath = path.join(ecommercePath, 'listing');
+    const listingPath = path.join(sidenavComponentsSrcPath, 'listing');
     checkIsDir(listingPath);
     checkFileContent(path.join(listingPath, 'colorsOptions.ts'), "// ==============================|| PRODUCT - COLOR FILTER ||============================== //\n// project imports\nimport type { ColorsOptionsProps } from '@/types/apps/EcommerceType';\n\nconst ColorsOptions: ColorsOptionsProps[] = [\n    {\n        label: 'Light Primary',\n        value: 'primary',\n        bg: 'bg-primary'\n    },\n    {\n        label: 'Light Secondary',\n        value: 'secondary',\n        bg: 'bg-secondary'\n    },\n    {\n        label: 'Light Green',\n        value: 'lightsuccess',\n        bg: 'bg-lightsuccess'\n    },\n    {\n        label: 'Green',\n        value: 'success',\n        bg: 'bg-success'\n    },\n    {\n        label: 'Light Red',\n        value: 'lighterror',\n        bg: 'bg-lighterror'\n    },\n    {\n        label: 'Red',\n        value: 'error',\n        bg: 'bg-error'\n    },\n    {\n        label: 'Yellow',\n        value: 'warning',\n        bg: 'bg-warning'\n    },\n    {\n        label: 'Dark Yellow',\n        value: 'lightwarning',\n        bg: 'bg-lightwarning'\n    },\n    {\n        label: 'Grey',\n        value: 'lightText',\n        bg: 'bg-lightText'\n    },\n    {\n        label: 'Black',\n        value: 'darkText',\n        bg: 'bg-darkText'\n    }\n];\n\nexport default ColorsOptions;" );
 
@@ -311,5 +302,4 @@ test(`Test File Names and Their Contents`, async () => {
     checkFileContent(path.join(utilsHelpersPath, 'fetch-wrapper.ts'), "import { useAuthStore } from '@/stores/auth';\n\nexport const fetchWrapper = {\n    get: request('GET'),\n    post: request('POST'),\n    put: request('PUT'),\n    delete: request('DELETE')\n};\n\nfunction request(method: string) {\n    return (url: any, body?: any) => {\n        const requestOptions: any = {\n            method,\n            headers: authHeader(url)\n        };\n        if (body) {\n            requestOptions.headers['Content-Type'] = 'application/json';\n            requestOptions.body = JSON.stringify(body);\n        }\n        return fetch(url, requestOptions).then(handleResponse);\n    };\n}\n\n// helper functions\n\nfunction authHeader(url: any) {\n    // return auth header with jwt if user is logged in and request is to the api url\n    const { user } = useAuthStore();\n    const isLoggedIn = !!user?.token;\n    const isApiUrl = url.startsWith(import.meta.env.VITE_API_URL);\n    if (isLoggedIn && isApiUrl) {\n        return { Authorization: `Bearer ${user.token}` };\n    } else {\n        return {};\n    }\n}\n\nfunction handleResponse(response: any) {\n    return response.text().then((text: any) => {\n        const data = text && JSON.parse(text);\n\n        if (!response.ok) {\n            const { user, logout } = useAuthStore();\n            if ([401, 403].includes(response.status) && user) {\n                // auto logout if 401 Unauthorized or 403 Forbidden response returned from api\n                logout();\n            }\n\n            const error = (data && data.message) || response.statusText;\n            return Promise.reject(error);\n        }\n\n        return data;\n    });\n}");
 
 
-    deleteFolderRecursive(frontEndPath);
 });
