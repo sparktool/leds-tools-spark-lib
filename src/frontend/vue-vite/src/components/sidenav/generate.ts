@@ -69,8 +69,8 @@ defineProps<{
 function generateNavMenu(project_abstraction: ProjectAbstraction): string {
     const classList : ClassAbstraction[] = []
 
-    for (const pkg of project_abstraction.getCorePackages()) {
-        for (const clazz of pkg.getClasses()) {
+    for (const pkg of project_abstraction.getCoresPackages()) {
+        for (const clazz of pkg.getPackageLevelClasses()) {
           classList.push(clazz)
         }
     }

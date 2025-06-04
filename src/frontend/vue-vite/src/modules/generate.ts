@@ -13,8 +13,8 @@ import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/Projec
 export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
     const classList : ClassAbstraction[] = []
 
-    for (const pkg of project_abstraction.getCorePackages()) {
-        for (const clazz of pkg.getClasses()){
+    for (const pkg of project_abstraction.getCoresPackages()) {
+        for (const clazz of pkg.getPackageLevelClasses()){
             classList.push(clazz)
         }
     }

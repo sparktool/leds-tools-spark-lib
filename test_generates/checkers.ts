@@ -11,8 +11,9 @@ export function checkIsDir(pathTest: string) {
     }
 }
 
-export function checkFileContent(fileTest: string, testString: string, isJson: boolean = false) {
+export function checkFileContent(fileTest: string, testString: string = "", isJson: boolean = false) {
     try {
+        checkIsFile(fileTest);
         const fileGeneratedString = fs.readFileSync(fileTest, 'utf-8');
         if (isJson) {
             const normalizedReferenceJsonString = JSON.stringify(JSON.parse(testString));

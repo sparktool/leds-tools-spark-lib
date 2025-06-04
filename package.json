@@ -1,11 +1,15 @@
 {
+  "scripts": {
+    "test": "vitest run"
+  },
   "dependencies": {
     "seon-lib-implementation": "^0.0.5"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",
     "commitizen": "^4.3.1",
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "vitest": "~1.0.0"
   },
   "config": {
     "commitizen": {

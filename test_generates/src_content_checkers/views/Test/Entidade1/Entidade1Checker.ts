@@ -27,10 +27,6 @@ export class Entidade1Checker{
                         <v-label class="font-weight-medium mb-2">numero</v-label>
                         <VTextField  type="number" placeholder="numero integer" hide-details v-model='form.Numero' disabled name="Numero"></VTextField>
                     </v-col>
-                    <v-col cols="12">
-                        <v-label class="font-weight-medium mb-2">Entidade2</v-label>
-                        <v-select :items="Entidade2Options" item-title="Id" item-value="Id" placeholder="Select Entidade2" hide-details v-model="form.Entidade2Id" disabled name="Entidade2"></v-select>
-                    </v-col>
 
                 </v-row>
             </v-card-text>
@@ -57,11 +53,9 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Entidade1Service from '../../../services/requires/Entidade1Requires';
-import Entidade2Service from '../../../services/requires/Entidade2Requires';
 
 import dayjs from 'dayjs';
 
-const { list: listEntidade2 } = Entidade2Service();
 
 const { list, remove, getById } = Entidade1Service();
 const route = useRoute();
@@ -69,13 +63,11 @@ const params = route.params;
 const router = useRouter();
 const dialogDelete = ref(false);
 
-const Entidade2Options = ref([]);
 
 const form = reactive({
     id: '',
     Nome: '',
-    Numero: '',
-    Entidade2Id: ''
+    Numero: ''
 });
 
 
@@ -109,10 +101,7 @@ onMounted(async () => {
         breadcrumbs.value[1].text = page.value.title;
     }
 
-    let response;
 
-    response = await listEntidade2();
-    Entidade2Options.value = response.value;
 
 });
 
@@ -183,10 +172,6 @@ const deletaEntidade1 = async () => {
                         <v-label class="font-weight-medium mb-2">numero</v-label>
                         <VTextField  type="number" placeholder="numero integer" hide-details v-model='form.Numero' name="numero"></VTextField>
                     </v-col>
-                    <v-col cols="12">
-                        <v-label class="font-weight-medium mb-2">Entidade2</v-label>
-                        <v-select :items="Entidade2Options" item-title="Id" item-value="Id" placeholder="Select Entidade2" hide-details v-model="form.Entidade2Id" name="Entidade2"></v-select>
-                    </v-col>
 
                     <v-col cols="12" class="d-flex justify-end">
                         <v-btn type="button" color="primary" variant="outlined" class="mr-3" @click='navigateBack' name="NavBackButton">Voltar</v-btn>
@@ -205,24 +190,20 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Entidade1Service from '../../../services/requires/Entidade1Requires';
-import Entidade2Service from '../../../services/requires/Entidade2Requires';
 
 import dayjs from 'dayjs';
 
-const { list: listEntidade2 } = Entidade2Service();
 
 const { list, post, getById, update } = Entidade1Service();
 const route = useRoute();
 const params = route.params;
 const router = useRouter();
 
-const Entidade2Options = ref([]);
 
 const form = reactive({
     id: '',
     Nome: '',
-    Numero: '',
-    Entidade2Id: ''
+    Numero: ''
 });
 
 
@@ -287,10 +268,7 @@ onMounted(async () => {
         submitButtonText.value = 'Editar Entidade1';
     }
 
-    let response;
 
-    response = await listEntidade2();
-    Entidade2Options.value = response.value;
 
 });
 
@@ -316,8 +294,8 @@ const navigateBack = () => {
 
 </script>`
         );
-        checkIsFile(path.join(this.localPath, 'IndexEntidade2.vue'));
-        checkFileContent(path.join(this.localPath, 'IndexEntidade2.vue'), 
+        checkIsFile(path.join(this.localPath, 'IndexEntidade1.vue'));
+        checkFileContent(path.join(this.localPath, 'IndexEntidade1.vue'), 
         `<template>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs" />
     <v-row>
@@ -396,7 +374,6 @@ const headers = ref([
 
   { title: 'nome', sortable: false, key: 'Nome' },
   { title: 'numero', sortable: false, key: 'Numero' },
-  { title: 'Entidade2', sortable: false, key: 'Entidade2Id' },
 
   { title: 'Ações', key: 'actions' }
 ]);
