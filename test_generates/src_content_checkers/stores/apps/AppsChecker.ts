@@ -1,5 +1,5 @@
 import path from "path";
-import { checkFileContent, checkIsDir, checkIsFile } from "../../../checkers";
+import { checkFileContent, checkIsDir, checkIsFile } from "../../../aux_frontend_tests/checkers";
 import { KanbanChecker } from "./kanban/KanbanChecker";
 import { UserProfileChecker } from "./userprofile/UserProfileChecker";
 

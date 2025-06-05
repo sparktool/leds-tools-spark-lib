@@ -1,5 +1,5 @@
 import path from "path";
-import { checkFileContent, checkIsDir, checkIsFile } from "../../checkers";
+import { checkFileContent, checkIsDir, checkIsFile } from "../../aux_frontend_tests/checkers";
 import { AuthChecker } from "./authentication/AuthChecker";
 import { TestChecker } from "./Test/TestChecker";
 

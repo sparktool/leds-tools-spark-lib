@@ -1,5 +1,10 @@
-export const srcApiFiles: { [key: string]:   string  } = {
-    "admin.ts": `import axios from 'axios'
+import path from "path"
+import { srcApiPath } from "../foldersDatas"
+
+export const srcApiFiles: { [key: string]:   string  } = {}
+
+
+srcApiFiles[path.join(srcApiPath, "admin.ts")] = `import axios from 'axios'
 import { useUiStore } from '@/stores/ui'
 
 
@@ -33,6 +38,4 @@ adminApi.interceptors.response.use((config) => {
   throw error
 })
 
-export default adminApi`,
-
-}
+export default adminApi`

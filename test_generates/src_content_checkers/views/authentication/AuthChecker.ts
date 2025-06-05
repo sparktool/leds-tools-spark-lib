@@ -1,5 +1,5 @@
 import path from "path";
-import { checkFileContent, checkIsDir, checkIsFile } from "../../../checkers";
+import { checkFileContent, checkIsDir, checkIsFile } from "../../../aux_frontend_tests/checkers";
 
 
 export class AuthChecker{

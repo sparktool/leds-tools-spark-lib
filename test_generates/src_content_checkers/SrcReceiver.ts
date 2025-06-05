@@ -1,4 +1,4 @@
-import { checkFileContent, checkIsDir, checkIsFile } from "../checkers";
+import { checkFileContent, checkIsDir, checkIsFile } from "../aux_frontend_tests/checkers";
 import path from "path";
 import { StoresChecker } from "./stores/StoresChecker";
 import { ViewChecker } from "./views/ViewsChecker";

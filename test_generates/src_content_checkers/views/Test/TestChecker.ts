@@ -1,5 +1,5 @@
 import path from "path";
-import { checkIsDir } from "../../../checkers";
+import { checkIsDir } from "../../../aux_frontend_tests/checkers";
 import { Entidade1Checker } from "./Entidade1/Entidade1Checker";
 import { Entidade2Checker } from "./Entidade2/Entidade2Checker";
 
