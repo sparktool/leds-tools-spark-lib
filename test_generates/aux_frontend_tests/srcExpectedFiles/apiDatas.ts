@@ -1,10 +1,12 @@
 import path from "path"
 import { srcApiPath } from "../foldersDatas"
+import { expandToString } from "../../../src/frontend/vue-vite/template-string"
 
 export const srcApiFiles: { [key: string]:   string  } = {}
 
 
-srcApiFiles[path.join(srcApiPath, "admin.ts")] = `import axios from 'axios'
+srcApiFiles[path.join(srcApiPath, "admin.ts")] = expandToString`
+import axios from 'axios'
 import { useUiStore } from '@/stores/ui'
 
 
@@ -12,7 +14,7 @@ import { useUiStore } from '@/stores/ui'
 export const adminApiConfig = {
   baseURL: import.meta.env.VITE_BACKEND_ADMIN_BASE_URL,
   headers: {
-    'Authorization': \`Bearer \${import.meta.env.VITE_BACKEND_ADMIN_AUTH_TOKEN}\`
+    'Authorization': ${generateBearer()}
   }
 }
 
@@ -39,3 +41,8 @@ adminApi.interceptors.response.use((config) => {
 })
 
 export default adminApi`
+
+function generateBearer() : string {
+    const str = "`" + "Bearer ${import.meta.env.VITE_BACKEND_ADMIN_AUTH_TOKEN}" + "`"
+    return str
+}

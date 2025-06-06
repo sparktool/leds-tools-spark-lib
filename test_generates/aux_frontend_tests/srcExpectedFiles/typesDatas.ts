@@ -1,11 +1,13 @@
 import path from "path";
 import { srcTypesPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 export const srcTypesFiles: { [key: string]: string } = {};
 
 
-srcTypesFiles[path.join(srcTypesPath, "ui.ts")] = `import type { InjectionKey, Ref } from "vue";
+srcTypesFiles[path.join(srcTypesPath, "ui.ts")] = expandToString`
+import type { InjectionKey, Ref } from "vue";
 
 
 

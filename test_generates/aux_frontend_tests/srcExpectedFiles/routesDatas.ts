@@ -1,10 +1,12 @@
 import path from "path";
 import { srcRoutesPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 export const srcRoutesFiles: { [key: string]: string } = {};
 
-srcRoutesFiles[path.join(srcRoutesPath, "index.ts")] = `import { type RouteRecordRaw } from 'vue-router'
+srcRoutesFiles[path.join(srcRoutesPath, "index.ts")] = expandToString`
+import { type RouteRecordRaw } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Login from '@/views/Login.vue'
 

@@ -1,10 +1,12 @@
 import path from "path";
 import { srcStoresPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 export const srcStoresFiles: { [key: string]: string } = {};
 
-srcStoresFiles[path.join(srcStoresPath, "auth.ts")] = `import { defineStore } from 'pinia'
+srcStoresFiles[path.join(srcStoresPath, "auth.ts")] = expandToString`
+import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCookies } from '@vueuse/integrations/useCookies'
@@ -54,7 +56,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 })`;
 
-srcStoresFiles[path.join(srcStoresPath, "ui.ts")] = `import { defineStore } from 'pinia'
+srcStoresFiles[path.join(srcStoresPath, "ui.ts")] = expandToString
+`import { defineStore } from 'pinia'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
 
 

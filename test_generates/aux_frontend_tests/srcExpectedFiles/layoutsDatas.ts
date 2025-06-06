@@ -1,11 +1,13 @@
 import path from "path";
 import { srcLayoutsPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 export const srcLayoutsFiles: { [key: string]:   string  } = {};
 
 
-srcLayoutsFiles[path.join(srcLayoutsPath, "Default.vue")] = `<script setup lang="ts">
+srcLayoutsFiles[path.join(srcLayoutsPath, "Default.vue")] = expandToString`
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
@@ -80,7 +82,8 @@ const tooltipBarra = computed(() => {
   </v-app>
 </template>`;
 
-srcLayoutsFiles[path.join(srcLayoutsPath, "NewDefault.vue")] = `<script setup lang="ts">
+srcLayoutsFiles[path.join(srcLayoutsPath, "NewDefault.vue")] = expandToString`
+<script setup lang="ts">
 import { useAuthStore } from '@/stores/auth';
 
 const sair = async () => {
@@ -101,13 +104,15 @@ const sair = async () => {
   </div>
 </template>`;
 
-srcLayoutsFiles[path.join(srcLayoutsPath, "NewPlain.vue")] = `<template>
+srcLayoutsFiles[path.join(srcLayoutsPath, "NewPlain.vue")] = expandToString`
+<template>
   <div class="flex justify-center items-center w-screen h-screen">
     <router-view />
   </div>
 </template>`;
 
-srcLayoutsFiles[path.join(srcLayoutsPath, "Plain.vue")] = `<script setup lang="ts">
+srcLayoutsFiles[path.join(srcLayoutsPath, "Plain.vue")] = expandToString`
+<script setup lang="ts">
 import { ref, provide, readonly } from 'vue'
 import { chaveModal } from '@/types/ui'
 

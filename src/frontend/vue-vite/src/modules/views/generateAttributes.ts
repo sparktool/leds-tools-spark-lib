@@ -6,10 +6,10 @@ export function generateAttributesAsParameters(cls: ClassAbstraction) : string {
     var str = ""
     for (const attr of cls.getAttributes()) {
         if (cls.getAttributes().indexOf(attr) + 1 == cls.getAttributes().length) {
-            str = str.concat(`${attr.getName()}: ${attr.getName().toLowerCase()}.value\n`)
+            str = str.concat(`    ${attr.getName()}: ${attr.getName().toLowerCase()}.value\n`)
         }
         else {
-            str = str.concat(`${attr.getName()}: ${attr.getName().toLowerCase()}.value,\n`)
+            str = str.concat(`    ${attr.getName()}: ${attr.getName().toLowerCase()}.value,\n`)
         }
     }
     return str
@@ -20,7 +20,7 @@ export function generateAttributesAsParameters(cls: ClassAbstraction) : string {
 export function generateAttributesValue(cls: ClassAbstraction): string {
     var str = ""
     for (const attr of cls.getAttributes()) {
-        str = str.concat(`${attr.getName().toLowerCase()}.value = ''\n`)
+        str = str.concat(`    ${attr.getName().toLowerCase()}.value = ''\n`)
     }
     return str
 }
@@ -32,7 +32,7 @@ export function generateAttributesValue(cls: ClassAbstraction): string {
 export function generateValuesEqualsAttributes(cls: ClassAbstraction): string {
     var str = ""
     for (const attr of cls.getAttributes()) {
-        str = str.concat(`${attr.getName().toLowerCase()}.value = cls.${attr.getName()}\n`)
+        str = str.concat(`    ${attr.getName().toLowerCase()}.value = cls.${attr.getName()}\n`)
     }
     return str
 }
@@ -45,10 +45,10 @@ export function generateAttributesAsHeader(cls: ClassAbstraction): string {
     var str = ""
     for (const attr of cls.getAttributes()) {
         if (cls.getAttributes().indexOf(attr) + 1 == cls.getAttributes().length) {
-            str = str.concat(`{ value: '${attr.getName()}', title: '${attr.getName()}' }\n`)
+            str = str.concat(`    { value: '${attr.getName()}', title: '${attr.getName()}' }\n`)
         }
         else {
-            str = str.concat(`{ value: '${attr.getName()}', title: '${attr.getName()}' },\n`)
+            str = str.concat(`    { value: '${attr.getName()}', title: '${attr.getName()}' },\n`)
         }
     }
     return str

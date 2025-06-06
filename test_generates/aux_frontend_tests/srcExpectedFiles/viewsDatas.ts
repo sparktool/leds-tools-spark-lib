@@ -1,11 +1,13 @@
 import path from "path";
 import { srcViewsPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 export const srcViewsFiles: { [key: string]: string } = {};
 
 
-srcViewsFiles[path.join(srcViewsPath,"Login.vue")] = `<script setup lang="ts">
+srcViewsFiles[path.join(srcViewsPath,"Login.vue")] = expandToString`
+<script setup lang="ts">
 import { ref, inject, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { chaveModal } from '@/types/ui'

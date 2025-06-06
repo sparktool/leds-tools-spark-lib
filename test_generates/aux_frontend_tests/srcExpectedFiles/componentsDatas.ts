@@ -1,5 +1,6 @@
 import path from "path";
 import { srcSidenavComponentsPath, srcIconsComponentsPath, srcComponentsPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 const navGroup: string = path.join(srcSidenavComponentsPath, 'NavGroup.vue');
@@ -17,7 +18,8 @@ const textInput: string = path.join(srcComponentsPath, 'TextInput.vue');
 export const srcComponentsFiles: { [key: string]:   string  } = {};
 
 
-srcComponentsFiles[iconNav] = `<script lang="ts" setup>
+srcComponentsFiles[iconNav] = expandToString`
+<script lang="ts" setup>
 defineProps<{
   open: boolean
 }>()
@@ -42,7 +44,8 @@ defineProps<{
   </div>
 </template>`;
 
-srcComponentsFiles[navGroup] = `<script lang="ts" setup>
+srcComponentsFiles[navGroup] = expandToString`
+<script lang="ts" setup>
 import { ref } from 'vue'
 import IconNav from '../icons/IconNav.vue';
 
@@ -72,7 +75,8 @@ const open = ref(false)
   </div>
 </template>`;
 
-srcComponentsFiles[navItem] = `<script lang="ts" setup>
+srcComponentsFiles[navItem] = expandToString`
+<script lang="ts" setup>
 defineProps<{
   label: string
 }>()
@@ -87,7 +91,8 @@ defineProps<{
   </router-link>
 </template>`;
 
-srcComponentsFiles[navMenu] = `<script lang="ts" setup>
+srcComponentsFiles[navMenu] = expandToString`
+<script lang="ts" setup>
 import NavGroup from './NavGroup.vue'
 import NavItem from './NavItem.vue'
 </script>
@@ -109,13 +114,15 @@ import NavItem from './NavItem.vue'
   </aside>
 </template>`;
 
-srcComponentsFiles[card] = `<template>
+srcComponentsFiles[card] = expandToString`
+<template>
   <div class="p-3 border-2 rounded-md border-zinc-500 shadow-md">
     <slot />
   </div>
 </template>`;
 
-srcComponentsFiles[dataTable] = `<script setup lang="ts">
+srcComponentsFiles[dataTable] = expandToString`
+<script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 
 interface DataTableHeader {
@@ -246,9 +253,9 @@ const excluir = () => {
 
         <select class="border rounded-md py-1 px-3">
           <option>5</option>
-
+          
           <option>10</option>
-
+          
           <option>15</option>
         </select>
       </div>
@@ -270,7 +277,8 @@ const excluir = () => {
   </div>
 </template>`;
 
-srcComponentsFiles[genericTextInput] = `<script setup lang="ts">
+srcComponentsFiles[genericTextInput] = expandToString`
+<script setup lang="ts">
 import { computed } from 'vue'
 
 export interface GenericTextInputProps {
@@ -315,7 +323,7 @@ const emitEnter = () => {
   />
 </template>`;
 
-srcComponentsFiles[pButton] = `
+srcComponentsFiles[pButton] = expandToString`
 <!-- P de 'pretty', para ser curto e n conflitar com button nativo-->
 <script setup lang="ts">
 import { computed } from 'vue';
@@ -344,7 +352,8 @@ const className = computed(() => {
   </button>
 </template>`;
 
-srcComponentsFiles[readMe] = `# Components
+srcComponentsFiles[readMe] = expandToString`
+# Components
 
 Vue template files in this folder are automatically imported.
 
@@ -379,7 +388,8 @@ vue
   import MyComponent from '@/components/MyComponent.vue'
 </script>`;
 
-srcComponentsFiles[textInput] = `<script lang="ts">
+srcComponentsFiles[textInput] = expandToString`
+<script lang="ts">
 import { computed, watch } from 'vue'
 import type { GenericTextInputProps } from './GenericTextInput.vue'
 import type { ValidationResult, ValidationResultFunction } from '@/utils/regras'

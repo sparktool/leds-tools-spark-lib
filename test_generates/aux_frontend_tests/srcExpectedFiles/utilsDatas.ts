@@ -1,11 +1,13 @@
 import path from "path";
 import { srcUtilsPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 export const srcUtilsFiles: { [key: string]: string } = {};
 
 
-srcUtilsFiles[path.join(srcUtilsPath,"regras.ts")] = `export type ValidationResult = string | boolean;
+srcUtilsFiles[path.join(srcUtilsPath,"regras.ts")] = expandToString`
+export type ValidationResult = string | boolean;
 export type ValidationResultFunction = (value: any) => ValidationResult
 // type ValidationResultFunction = (value: any) => ValidationResult
 

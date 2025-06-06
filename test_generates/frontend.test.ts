@@ -52,10 +52,11 @@ beforeAll(() => {
     generate(project, __dirname);
 });
 
-
+/*
 afterAll(() => {
     deleteFolderRecursive(path.join(__dirname, 'frontend'));
 });
+*/
 
 
 test.each(allFolderList)(`Test existence of folder %s`, (dirPath) => {

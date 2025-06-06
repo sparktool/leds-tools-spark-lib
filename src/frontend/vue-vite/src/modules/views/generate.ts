@@ -66,10 +66,10 @@ const criar = async () => {
     return false
   }
   const sucesso = await criar${cls.getName()}({
-    ${generateAttributesAsParameters(cls)}
+${generateAttributesAsParameters(cls)}
   })
   if (sucesso) {
-    ${generateAttributesValue(cls)}
+${generateAttributesValue(cls)}
   }
   return true
 }
@@ -85,7 +85,7 @@ const atualizar = async () => {
 
   const sucesso = await atualizar${cls.getName()}({
     Id: id.value,
-    ${generateAttributesAsParameters(cls)}
+${generateAttributesAsParameters(cls)}
   })
   return true
 }
@@ -102,15 +102,14 @@ onBeforeMount(async () => {
     const routeId: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
     const cls = await obter${cls.getName()}(routeId)
     id.value = cls.Id
-    ${generateValuesEqualsAttributes(cls)}
+${generateValuesEqualsAttributes(cls)}
   }
 })
 </script>
 
 <template>
   <card class="w-md">
-    ${generateTextInputs(cls)}
-
+${generateTextInputs(cls)}
     <div class="flex justify-end">
       <p-button
         @click="dispatchBotao"
@@ -139,7 +138,7 @@ import type { ${cls.getName()} } from '../types/${cls.getName().toLowerCase()}'
 
 const ui = useUiStore()
 const headers = [
-   ${generateAttributesAsHeader(cls)}
+${generateAttributesAsHeader(cls)}
 ]
 const items = ref<${cls.getName()}[]>([])
 
@@ -189,21 +188,25 @@ function generateTextInputs(cls: ClassAbstraction) : string {
     for (const attr of cls.getAttributes()) {
       if (attr.getName().toLowerCase() === "nome") {
         str = str.concat(expandToString`
-          <text-input
-      class="w-full"
-      placeholder="Nome"
-      v-model="nome"
-      :rules="regrasNome"
-      @validationUpdate="updateNomeValido"
-      />\n`)
+<text-input
+  class="w-full"
+  placeholder="Nome"
+  v-model="nome"
+  :rules="regrasNome"
+  @validationUpdate="updateNomeValido"
+/>
+        `)
+        str = str.concat("\n")
       }
       else{
         str = str.concat(expandToString`
-          <text-input
-      class="w-full"
-      placeholder="${capitalizeFirstLetter(attr.getName())}"
-      v-model="${attr.getName()}"
-      />\n`)
+<text-input
+  class="w-full"
+  placeholder="${capitalizeFirstLetter(attr.getName())}"
+  v-model="${attr.getName()}"
+/>
+        `)
+        str = str.concat("\n")
       }
     }
     return str

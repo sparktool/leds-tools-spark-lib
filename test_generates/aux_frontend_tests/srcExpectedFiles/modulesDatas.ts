@@ -1,13 +1,15 @@
 
 import path from "path";
 import { entidade1Path, entidade1viewsPath, entidade2Path, entidade2viewsPath, srcModulesPath } from "../foldersDatas";
+import { expandToString } from "../../../src/frontend/vue-vite/template-string";
 
 
 export const srcModulesFiles: { [key: string]:   string  } = {};
 
 
 
-srcModulesFiles[path.join(srcModulesPath, "index.ts")] = `import { type RouteRecordRaw } from 'vue-router'
+srcModulesFiles[path.join(srcModulesPath, "index.ts")] = expandToString`
+import { type RouteRecordRaw } from 'vue-router'
 
 import { routes as entidade1Route } from './Entidade1'
 import { routes as entidade2Route } from './Entidade2'
@@ -19,7 +21,8 @@ export const routes: RouteRecordRaw[] = [
 
 ]`;
 
-srcModulesFiles[path.join(entidade1Path, "index.ts")] = `import { type RouteRecordRaw } from 'vue-router'
+srcModulesFiles[path.join(entidade1Path, "index.ts")] = expandToString`
+import { type RouteRecordRaw } from 'vue-router'
 import { routes as _routes } from './routes'
 
 export const routes: RouteRecordRaw[] = [
@@ -32,7 +35,8 @@ export const routes: RouteRecordRaw[] = [
   }
 ]`;
 
-srcModulesFiles[path.join(entidade2Path, "index.ts")] = `import { type RouteRecordRaw } from 'vue-router'
+srcModulesFiles[path.join(entidade2Path, "index.ts")] = expandToString`
+import { type RouteRecordRaw } from 'vue-router'
 import { routes as _routes } from './routes'
 
 export const routes: RouteRecordRaw[] = [
@@ -45,7 +49,8 @@ export const routes: RouteRecordRaw[] = [
   }
 ]`;
 
-srcModulesFiles[path.join(entidade1viewsPath, "Criar.vue")] = `<script setup lang="ts">
+srcModulesFiles[path.join(entidade1viewsPath, "Criar.vue")] = expandToString`
+<script setup lang="ts">
 import { ref, computed, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import {
@@ -149,17 +154,18 @@ onBeforeMount(async () => {
 
 <template>
   <card class="w-md">
-        <text-input
-    class="w-full"
-    placeholder="Nome"
-    v-model="nome"
-    :rules="regrasNome"
-    @validationUpdate="updateNomeValido"
-    />    <text-input
-    class="w-full"
-    placeholder="Numero"
-    v-model="numero"
-    />
+<text-input
+  class="w-full"
+  placeholder="Nome"
+  v-model="nome"
+  :rules="regrasNome"
+  @validationUpdate="updateNomeValido"
+/>
+<text-input
+  class="w-full"
+  placeholder="Numero"
+  v-model="numero"
+/>
 
     <div class="flex justify-end">
       <p-button
@@ -171,7 +177,8 @@ onBeforeMount(async () => {
   </card>
 </template>`;
 
-srcModulesFiles[path.join(entidade1viewsPath, "Listar.vue")] = `<script setup lang="ts">
+srcModulesFiles[path.join(entidade1viewsPath, "Listar.vue")] = expandToString`
+<script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUiStore } from '@/stores/ui'
@@ -185,8 +192,8 @@ import type { Entidade1 } from '../types/entidade1'
 
 const ui = useUiStore()
 const headers = [
-   { value: 'nome', title: 'nome' },
-   { value: 'numero', title: 'numero' }
+    { value: 'nome', title: 'nome' },
+    { value: 'numero', title: 'numero' }
 
 ]
 const items = ref<Entidade1[]>([])
@@ -219,7 +226,8 @@ onBeforeMount(carregarEntidade1s)
   />
 </template>`;
 
-srcModulesFiles[path.join(entidade2viewsPath, "Criar.vue")] = `<script setup lang="ts">
+srcModulesFiles[path.join(entidade2viewsPath, "Criar.vue")] = expandToString`
+<script setup lang="ts">
 import { ref, computed, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import {
@@ -323,17 +331,18 @@ onBeforeMount(async () => {
 
 <template>
   <card class="w-md">
-        <text-input
-    class="w-full"
-    placeholder="Nome"
-    v-model="nome"
-    :rules="regrasNome"
-    @validationUpdate="updateNomeValido"
-    />    <text-input
-    class="w-full"
-    placeholder="Verificacao"
-    v-model="verificacao"
-    />
+<text-input
+  class="w-full"
+  placeholder="Nome"
+  v-model="nome"
+  :rules="regrasNome"
+  @validationUpdate="updateNomeValido"
+/>
+<text-input
+  class="w-full"
+  placeholder="Verificacao"
+  v-model="verificacao"
+/>
 
     <div class="flex justify-end">
       <p-button
@@ -345,7 +354,8 @@ onBeforeMount(async () => {
   </card>
 </template>`;
 
-srcModulesFiles[path.join(entidade2viewsPath, "Listar.vue")] = `<script setup lang="ts">
+srcModulesFiles[path.join(entidade2viewsPath, "Listar.vue")] = expandToString`
+<script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUiStore } from '@/stores/ui'
@@ -359,8 +369,8 @@ import type { Entidade2 } from '../types/entidade2'
 
 const ui = useUiStore()
 const headers = [
-   { value: 'nome', title: 'nome' },
-   { value: 'verificacao', title: 'verificacao' }
+    { value: 'nome', title: 'nome' },
+    { value: 'verificacao', title: 'verificacao' }
 
 ]
 const items = ref<Entidade2[]>([])

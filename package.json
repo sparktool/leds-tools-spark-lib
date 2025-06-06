@@ -3,7 +3,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "seon-lib-implementation": "^0.0.5"
+    "seon-lib-implementation": "^0.0.6"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",

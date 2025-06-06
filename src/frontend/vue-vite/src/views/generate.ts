@@ -13,7 +13,7 @@ function generateLogin(project_abstraction: ProjectAbstraction, target_folder: s
 import { ref, inject, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { chaveModal } from '@/types/ui'
-import { 
+import {
   campoNecessario,
   minimo3caracteres,
   caracteresEspeciais
@@ -83,6 +83,5 @@ const entrar = async () => {
       </p-button>
     </div>
   </card>
-</template>    
-`
+</template>`
 }

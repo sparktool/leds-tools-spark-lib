@@ -120,7 +120,7 @@ function generatePackage(): string {
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --port 5173",
-    "build": "run-p type-check \\"build-only {@}\\" --",
+    "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force"

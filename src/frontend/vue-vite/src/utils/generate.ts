@@ -33,6 +33,5 @@ export const caracteresEspeciais: ValidationResultFunction = (senha) => {
     return true
   }
   return 'A senha deve possuir caracteres especiais como: ! @ # $ % ^'
-}  
-`
+}`
 }
