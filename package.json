@@ -1,6 +1,11 @@
 {
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "build": "npm run test && tsc",
+    "publish:public": "npm run build && npm publish --access public",
+    "test:github": "vitest run",
+    "build:github": "tsc",
+    "publish:github": "npm publish --access public"
   },
   "dependencies": {
     "seon-lib-implementation": "^0.0.6",
