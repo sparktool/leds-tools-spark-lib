@@ -1,5 +1,5 @@
 import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import { expandToString } from "./template-string.ts";
+import { expandToString } from "./template-string.js";
 
 export function generate(project_abstraction: ProjectAbstraction): string {
   return expandToString`

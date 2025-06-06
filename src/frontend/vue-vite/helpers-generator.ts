@@ -1,5 +1,5 @@
 import fs from "fs";
-import { expandToString } from "./template-string.ts";
+import { expandToString } from "./template-string.js";
 import path from "path";
 import { generate as generatePackageLock} from "./packagelock-generator.js"
 import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
