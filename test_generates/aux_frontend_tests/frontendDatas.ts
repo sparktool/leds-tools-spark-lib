@@ -89,13 +89,13 @@ declare module 'vue' {
     
     "package-lock.json": expandToString`
 {
-  "name": "Test",
+  "name": "modularch",
   "version": "0.0.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "Test",
+      "name": "modularch",
       "version": "0.0.0",
       "dependencies": {
         "@vueuse/integrations": "^13.1.0",
@@ -5359,7 +5359,8 @@ declare module 'vue' {
       }
     }
   }
-}`,
+}
+`,
 
     "package.json": expandToString`
 {

@@ -4,13 +4,13 @@ import { expandToString } from "./template-string.ts";
 export function generate(project_abstraction: ProjectAbstraction): string {
   return expandToString`
 {
-  "name": "${project_abstraction.getProjectName()}",
+  "name": "modularch",
   "version": "0.0.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "${project_abstraction.getProjectName()}",
+      "name": "modularch",
       "version": "0.0.0",
       "dependencies": {
         "@vueuse/integrations": "^13.1.0",
