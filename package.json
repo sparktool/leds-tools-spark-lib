@@ -1,6 +1,6 @@
 {
   "name": "leds-spark-lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Biblioteca de geração de código",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,6 +9,9 @@
     "build": "npm run test && tsc",
     "publish:public": "npm run build && npm publish --access public",
     "test:github": "vitest run",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && npm publish",
     "build:github": "tsc",
     "publish:github": "npm publish --access public"
   },
