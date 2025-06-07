@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, expect, test, vi } from "vitest";
 import {generate} from "../src/frontend/vue-vite/generate.js";
-// import PackageAbstraction from "seon-lib-implementation/dist/abstractions/project/PackageAbstraction.js";
 import { checkIsDir, checkFileContent, checkIsFile  } from "./aux_frontend_tests/checkers.js";
 import { deleteFolderRecursive } from "./aux_frontend_tests/deletionFrontend.js";
 import path from 'path';
@@ -52,11 +51,9 @@ beforeAll(() => {
     generate(project, __dirname);
 });
 
-
 afterAll(() => {
     deleteFolderRecursive(path.join(__dirname, 'frontend'));
 });
-
 
 
 test.each(allFolderList)(`Test existence of folder %s`, (dirPath) => {
@@ -87,10 +84,6 @@ const allSrcFiles: { [key: string] : string } = {
     ...srcApiFiles, ...srcComponentsFiles, ...srcLayoutsFiles, 
     ...srcModulesFiles, ...srcPluginsFiles, ...srcRootFiles, ...srcRoutesFiles,
     ...srcStoresFiles, ...srcTypesFiles, ...srcUtilsFiles, ...srcViewsFiles
-}
-
-for (let i in allFolderList) {
-    console.log(i, allFolderList[i])
 }
 
 let eachSrcFileContent: [string, string][] = [];
