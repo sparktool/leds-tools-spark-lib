@@ -1,4 +1,9 @@
 {
+  "name": "leds-spark-lib",               
+  "version": "1.0.0",                 
+  "description": "Biblioteca de geração de código",
+  "main": "dist/index.js",           
+  "types": "dist/index.d.ts",        
   "scripts": {
     "test": "vitest run",
     "build": "npm run test && tsc",
@@ -22,5 +27,26 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "keywords": ["typescript", "lib", "spark", "leds"],
+  "author": "Guilherme Cabral <satelliteex@gmail.com>",
+  "contributors": [
+    {
+      "name": "Bruno Chevitarese",
+      "url": "https://github.com/chevitaresebruno"
+    },
+    {
+      "name": "Henrique Lima",
+      "url": "https://github.com/henriqk0"
+    },
+    {
+      "name": "Nicolas Botelho",
+      "url": "https://github.com/Nicolas-Botelho"
+    },
+    {
+      "name": "Lucas Bruno",
+      "url": "https://github.com/lucasbruno-devdog"
+    }
+  ],
+  "license": "MIT"
 }
