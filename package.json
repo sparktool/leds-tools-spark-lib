@@ -1,9 +1,9 @@
 {
-  "name": "leds-spark-lib",               
-  "version": "1.0.0",                 
+  "name": "leds-spark-lib",
+  "version": "1.0.0",
   "description": "Biblioteca de geração de código",
-  "main": "dist/index.js",           
-  "types": "dist/index.d.ts",        
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
     "build": "npm run test && tsc",
@@ -17,6 +17,7 @@
     "vue": "^3.5.16"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.4",
     "@types/node": "^22.15.29",
     "@types/vue": "^1.0.31",
     "commitizen": "^4.3.1",
@@ -28,7 +29,12 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "keywords": ["typescript", "lib", "spark", "leds"],
+  "keywords": [
+    "typescript",
+    "lib",
+    "spark",
+    "leds"
+  ],
   "author": "Guilherme Cabral <satelliteex@gmail.com>",
   "contributors": [
     {
