@@ -1,6 +1,6 @@
 {
   "name": "leds-spark-lib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Biblioteca de geração de código",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
