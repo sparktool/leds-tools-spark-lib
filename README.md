@@ -50,4 +50,4 @@ npm install
 ## 💻 Exemplo de Uso
 
 ⚠️ **(Em construção)**
-{Aqui você poderá adicionar exemplos práticos de como utilizar a biblioteca em breve.}
+{Aqui você poderá adicionar exemplos práticos de como utilizar a biblioteca em breve}
