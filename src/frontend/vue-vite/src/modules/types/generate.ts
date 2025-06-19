@@ -1,14 +1,13 @@
 import fs from "fs"
-import { expandToString } from "../../../template-string";
+import { expandToString } from "../../../../../util/template-string.js";
 import path from "path"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, cls: ClassAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, `${cls.getName().toLowerCase()}.d.ts`), generateType(project_abstraction, cls))
 }
 
-function generateType(project_abstraction: ProjectAbstraction, cls: ClassAbstraction) : string {
+function generateType(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
     return expandToString`
 export type ${cls.getName()} = {
   ${generateAttributes(project_abstraction, cls)}
@@ -40,8 +39,8 @@ export type ${cls.getName()}DeleteRes = ${cls.getName()}UpdateRes
 `
 }
 
-function generateAttributes(project_abstraction: ProjectAbstraction, cls: ClassAbstraction) : string{
-    var str = ""
+function generateAttributes(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string{
+    let str = ""
 
     for (const attr of cls.getAttributes()) {
         str = str.concat(`${attr.getName()} : ${attr.getType().getName()}\n`)
@@ -52,8 +51,8 @@ function generateAttributes(project_abstraction: ProjectAbstraction, cls: ClassA
     return str
 }
 
-function generateAttributesToPick(project_abstraction: ProjectAbstraction, cls: ClassAbstraction) : string {
-    var str = ""
+function generateAttributesToPick(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
+    let str = ""
     for (const attr of cls.getAttributes()) {
         if (cls.getAttributes().indexOf(attr) + 1 == cls.getAttributes().length) {
             str = str.concat(`"${attr.getName()}"`)

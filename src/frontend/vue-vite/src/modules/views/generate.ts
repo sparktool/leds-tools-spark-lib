@@ -1,19 +1,15 @@
 import fs from "fs"
-import { expandToString } from "../../../template-string.js";
+import { expandToString } from "../../../../../util/template-string.js";
 import path from "path"
-import { generateAttributesAsParameters } from "./generateAttributes.js"
-import { generateAttributesValue } from "./generateAttributes.js"
-import { generateValuesEqualsAttributes } from "./generateAttributes.js"
-import { generateAttributesAsHeader } from "./generateAttributes.js"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction.js";
+import { generateAttributesAsParameters, generateAttributesValue, generateValuesEqualsAttributes, generateAttributesAsHeader  } from "./generateAttributes.js"
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, cls: ClassAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, "Criar.vue"), generateCriar(project_abstraction, cls))
     fs.writeFileSync(path.join(target_folder, "Listar.vue"), generateListar(project_abstraction, cls))
 }
 
-function generateCriar(project_abstraction: ProjectAbstraction, cls: ClassAbstraction) : string {
+function generateCriar(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
     return expandToString`
 <script setup lang="ts">
 import { ref, computed, onBeforeMount } from 'vue'
@@ -122,7 +118,7 @@ ${generateTextInputs(cls)}
 `
 }
 
-function generateListar(project_abstraction: ProjectAbstraction, cls: ClassAbstraction) : string {
+function generateListar(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
     return expandToString`
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
@@ -174,8 +170,8 @@ onBeforeMount(carregar${cls.getName()}s)
 
 
 // Gera as reactive variables para cada atributo da classe
-function generateRefs(cls: ClassAbstraction) : string {
-    var str = ""
+function generateRefs(cls: SEON.ClassAbstraction) : string {
+    let str = ""
     for (const attr of cls.getAttributes()) {
         str = str.concat(`const ${attr.getName()} = ref('')\n`)
     }
@@ -183,8 +179,8 @@ function generateRefs(cls: ClassAbstraction) : string {
 }
 
 // Gera text inputs para cada atributo da classe
-function generateTextInputs(cls: ClassAbstraction) : string {
-    var str = ""
+function generateTextInputs(cls: SEON.ClassAbstraction) : string {
+    let str = ""
     for (const attr of cls.getAttributes()) {
       if (attr.getName().toLowerCase() === "nome") {
         str = str.concat(expandToString`

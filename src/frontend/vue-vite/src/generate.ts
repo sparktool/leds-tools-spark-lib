@@ -1,6 +1,6 @@
 import fs from "fs";
 import { createPath } from "../../../util/generator-utils.js";
-import { expandToString } from "../template-string.js";
+import { expandToString } from "../../../util/template-string.js";
 import path from "path";
 
 import { generate as generateAPI } from "./api/generate.js";
@@ -16,9 +16,9 @@ import { generate as generateStores} from "./stores/generate.js"
 import { generate as generateTypes } from "./types/generate.js";
 import { generate as generateViews} from "./views/generate.js"
 import { generate as generateUtils} from "./utils/generate.js"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
 
     const src_folder = createPath(target_folder, "src")
     const api_folder = createPath(src_folder, "api")

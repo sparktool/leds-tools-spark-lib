@@ -1,12 +1,12 @@
 import path from "path";
 import fs from "fs";
 import { generate as generateVueModularArch} from "./frontend/vue-vite/generate.js";
-import type ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
+import type { ProjectAbstraction } from "seon-lib-implementation";
 import { VueModularArchitecture } from "seon-lib-implementation";
 
 // Classe principal da Spark Lib
 export class ProjectGenerator {
-    private project: ProjectAbstraction;
+    private readonly project: ProjectAbstraction;
 
     constructor(project: ProjectAbstraction){
         this.project = project;

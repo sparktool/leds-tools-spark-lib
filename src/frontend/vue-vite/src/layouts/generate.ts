@@ -1,17 +1,16 @@
 import fs from "fs"
-import { expandToString } from "../../template-string.js";
+import { expandToString } from "../../../../util/template-string.js";
 import path from "path"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction.js";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, 'Default.vue'), generateDefault(project_abstraction, target_folder))
     fs.writeFileSync(path.join(target_folder, 'NewDefault.vue'), generateNewDefault(project_abstraction, target_folder))
     fs.writeFileSync(path.join(target_folder, 'NewPlain.vue'), generateNewPlain(project_abstraction, target_folder))
     fs.writeFileSync(path.join(target_folder, 'Plain.vue'), generatePlain(project_abstraction, target_folder))
 }
 
-function generateDefault(project_abstraction: ProjectAbstraction, target_folder: string) : string {
+function generateDefault(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : string {
     return expandToString`
 <script setup lang="ts">
 import { computed } from 'vue'
@@ -78,27 +77,15 @@ ${generateClassDivider(project_abstraction, target_folder)}
 `
 }
 
-function generateClassDivider(project_abstraction: ProjectAbstraction, target_folder: string) : string {
-    var str: string = ""
-    const classList : ClassAbstraction[] = []
+function generateClassDivider(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : string {
+    let str: string = ""
+    const classList : SEON.ClassAbstraction[] = []
 
     for (const pkg of project_abstraction.getCoresPackages()) {
         for (const clazz of pkg.getPackageLevelClasses()) {
           classList.push(clazz)
         }
     }
- 
-    /*
-    const modulesList : Module[] = []
-    for (const absElem of model.abstractElements) {
-        if (isModule(absElem)) modulesList.push(absElem)
-    }
-    for (const mod of modulesList) {
-        for (const elem of mod.elements) {
-            if (isLocalEntity(elem)) classList.push(elem)
-        }
-    }
-    */
 
     for (const cls of classList) {
         if (classList.indexOf(cls) + 1 == classList.length) str = str.concat(expandToString`
@@ -125,7 +112,7 @@ function generateClassDivider(project_abstraction: ProjectAbstraction, target_fo
     return str
 }
 
-function generateNewDefault(project_abstraction: ProjectAbstraction, target_folder: string) : string {
+function generateNewDefault(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : string {
     return expandToString`
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth';
@@ -150,7 +137,7 @@ const sair = async () => {
 `
 }
 
-function generateNewPlain(project_abstraction: ProjectAbstraction, target_folder: string) : string {
+function generateNewPlain(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : string {
     return expandToString`
 <template>
   <div class="flex justify-center items-center w-screen h-screen">
@@ -160,7 +147,7 @@ function generateNewPlain(project_abstraction: ProjectAbstraction, target_folder
 `
 }
 
-function generatePlain(project_abstraction: ProjectAbstraction, target_folder: string) : string {
+function generatePlain(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : string {
     return expandToString`
 <script setup lang="ts">
 import { ref, provide, readonly } from 'vue'

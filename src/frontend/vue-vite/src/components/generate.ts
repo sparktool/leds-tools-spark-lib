@@ -1,5 +1,5 @@
 import fs from "fs";
-import { expandToString } from "../../template-string.js";
+import { expandToString } from "../../../../util/template-string.js";
 import path from "path";
 import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
 

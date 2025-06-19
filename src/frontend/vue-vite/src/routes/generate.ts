@@ -1,15 +1,14 @@
 import fs from "fs"
-import { expandToString } from "../../template-string.js";
+import { expandToString } from "../../../../util/template-string.js";
 import path from "path"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction.js";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, 'index.ts'), generateIndex(project_abstraction, target_folder))
 }
 
-function generateIndex(project_abstraction: ProjectAbstraction, target_folder: string): string {
-    const classList : ClassAbstraction[] = []
+function generateIndex(project_abstraction: SEON.ProjectAbstraction, target_folder: string): string {
+    const classList : SEON.ClassAbstraction[] = []
 
     for (const pkg of project_abstraction.getCoresPackages()) {
         for (const clazz of pkg.getPackageLevelClasses()){

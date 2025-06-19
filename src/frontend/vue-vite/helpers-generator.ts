@@ -1,10 +1,10 @@
 import fs from "fs";
-import { expandToString } from "./template-string.js";
+import { expandToString } from "../../util/template-string.js";
 import path from "path";
 import { generate as generatePackageLock} from "./packagelock-generator.js"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
 
     fs.writeFileSync(path.join(target_folder, '.browserslistrc'),generateBrowsersList());
     fs.writeFileSync(path.join(target_folder, '.editorconfig'), generateEditorConfig());
@@ -274,7 +274,7 @@ export default defineConfig({
 `
 }
 
-function generateIndex(project_abstraction: ProjectAbstraction): string {
+function generateIndex(project_abstraction: SEON.ProjectAbstraction): string {
     return expandToString`
 <!DOCTYPE html>
 <html lang="en">

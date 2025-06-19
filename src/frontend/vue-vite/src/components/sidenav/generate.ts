@@ -1,11 +1,11 @@
 import fs from "fs";
-import { expandToString } from "../../../template-string.js";
+import { expandToString } from "../../../../../util/template-string.js";
 import path from "path";
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction.js";
+import SEON from "seon-lib-implementation";
 
 
-export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
+
+export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, 'NavGroup.vue'), generateNavGroup());
     fs.writeFileSync(path.join(target_folder, 'NavItem.vue'), generateNavItem());
     fs.writeFileSync(path.join(target_folder, 'NavMenu.vue'), generateNavMenu(project_abstraction));
@@ -66,26 +66,14 @@ defineProps<{
 `
 }
 
-function generateNavMenu(project_abstraction: ProjectAbstraction): string {
-    const classList : ClassAbstraction[] = []
+function generateNavMenu(project_abstraction: SEON.ProjectAbstraction): string {
+    const classList : SEON.ClassAbstraction[] = []
 
     for (const pkg of project_abstraction.getCoresPackages()) {
         for (const clazz of pkg.getPackageLevelClasses()) {
           classList.push(clazz)
         }
     }
-
-    /*
-    const modulesList : Module[] = []
-    for (const absElem of model.abstractElements) {
-        if (isModule(absElem)) modulesList.push(absElem)
-    }
-    for (const mod of modulesList) {
-        for (const elem of mod.elements) {
-            if (isLocalEntity(elem)) classList.push(elem)
-        }
-    }
-    */    
 
     return expandToString`
 <script lang="ts" setup>
@@ -106,8 +94,8 @@ ${generateNav(classList)}
 `
 }
 
-function generateNav(clsList: ClassAbstraction[]): string {
-    var str = ""
+function generateNav(clsList: SEON.ClassAbstraction[]): string {
+    let str = ""
 
     for (const cls of clsList) {
         str = str.concat(expandToString`

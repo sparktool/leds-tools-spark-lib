@@ -1,14 +1,13 @@
 import fs from "fs"
-import { expandToString } from "../../../template-string";
+import { expandToString } from "../../../../../util/template-string.js";
 import path from "path"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, cls: ClassAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, `index.ts`), generateRoute(project_abstraction, cls))
 }
 
-function generateRoute(project_abstraction: ProjectAbstraction, cls: ClassAbstraction) : string {
+function generateRoute(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
     return expandToString`
 import type { RouteRecordRaw } from 'vue-router'
 import Listar from '../views/Listar.vue'

@@ -1,14 +1,13 @@
 import fs from "fs"
-import { expandToString } from "../../../template-string";
+import { expandToString } from "../../../../../util/template-string.js";
 import path from "path"
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, cls: ClassAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, `${cls.getName().toLowerCase()}.ts`), generateController(project_abstraction, cls))
 }
 
-function generateController(project_abstraction: ProjectAbstraction, cls: ClassAbstraction) : string {
+function generateController(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
     return expandToString`
 /**
  * arquivo controller trata da parte de erros e interface de usuario

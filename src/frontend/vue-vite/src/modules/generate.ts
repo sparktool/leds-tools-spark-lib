@@ -5,13 +5,12 @@ import { generate as generateRoutes} from "./routes/generate.js"
 import { generate as generateTypes} from "./types/generate.js"
 import { generate as generateViews } from "./views/generate.js"
 import fs from "fs"
-import { expandToString } from "../../template-string.js";
+import { expandToString } from "../../../../util/template-string.js";
 import path from "path"
-import ClassAbstraction from "seon-lib-implementation/dist/abstractions/oo/ClassAbstraction.js";
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
-    const classList : ClassAbstraction[] = []
+export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
+    const classList : SEON.ClassAbstraction[] = []
 
     for (const pkg of project_abstraction.getCoresPackages()) {
         for (const clazz of pkg.getPackageLevelClasses()){
@@ -28,7 +27,7 @@ export function generate(project_abstraction: ProjectAbstraction, target_folder:
     }
 }
 
-function generateModulesIndex(clsList : ClassAbstraction[]) : string {
+function generateModulesIndex(clsList : SEON.ClassAbstraction[]) : string {
     return expandToString`
 import { type RouteRecordRaw } from 'vue-router'
 
@@ -40,8 +39,8 @@ ${generateExportClass(clsList)}
 `
 }
 
-function generateImportClass(clsList: ClassAbstraction[]) : string {
-    var str = ""
+function generateImportClass(clsList: SEON.ClassAbstraction[]) : string {
+    let str = ""
 
     for (const cls of clsList) {
         str = str.concat(`import { routes as ${cls.getName().toLowerCase()}Route } from './${cls.getName()}'\n`)
@@ -50,8 +49,8 @@ function generateImportClass(clsList: ClassAbstraction[]) : string {
     return str
 }
 
-function generateExportClass(clsList: ClassAbstraction[]) : string {
-    var str = ""
+function generateExportClass(clsList: SEON.ClassAbstraction[]) : string {
+    let str = ""
 
     for (const cls of clsList) {
         str = str.concat(`  ...${cls.getName().toLowerCase()}Route,\n`)
@@ -60,7 +59,7 @@ function generateExportClass(clsList: ClassAbstraction[]) : string {
     return str
 }
 
-function generateModule(project_abstraction: ProjectAbstraction, cls: ClassAbstraction, target_folder: string) : void {
+function generateModule(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, 'index.ts'), generateModIndex(cls))
 
     const api_folder = createPath(target_folder, "api")
@@ -82,7 +81,7 @@ function generateModule(project_abstraction: ProjectAbstraction, cls: ClassAbstr
     generateViews(project_abstraction, cls, views_folder)
 }
 
-function generateModIndex(cls: ClassAbstraction) : string {
+function generateModIndex(cls: SEON.ClassAbstraction) : string {
     return expandToString`
 import { type RouteRecordRaw } from 'vue-router'
 import { routes as _routes } from './routes'

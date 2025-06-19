@@ -1,7 +1,7 @@
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction";
-import { expandToString } from "./template-string.js";
+import SEON from "seon-lib-implementation";
+import { expandToString } from "../../util/template-string.js";
 
-export function generate(project_abstraction: ProjectAbstraction): string {
+export function generate(project_abstraction: SEON.ProjectAbstraction): string {
   return expandToString`
 {
   "name": "modularch",

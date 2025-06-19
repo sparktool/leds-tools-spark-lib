@@ -1,10 +1,10 @@
 import fs from "fs";
 import { createPath } from "../../../util/generator-utils.js";
-import { expandToString } from "../template-string.js";
+import { expandToString } from "../../../util/template-string.js";
 import path from "path";
-import ProjectAbstraction from "seon-lib-implementation/dist/abstractions/ProjectAbstraction.js";
+import SEON from "seon-lib-implementation";
 
-export function generate(project_abstraction: ProjectAbstraction, target_folder: string) : void {
+export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
 
     const target_folder_public = createPath(target_folder, "public")
     const assets = createPath(target_folder_public, "assets")

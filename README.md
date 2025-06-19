@@ -2,7 +2,15 @@
 
 ## ✨ Sobre a SparkLib
 
-**SparkLib** é uma biblioteca de geração de código focada em produtividade e padronização. Atualmente, esta versão tem suporte para gerar **código frontend utilizando Vue Modular com Tailwind CSS**.
+**SparkLib** é uma biblioteca de geração de código focada em produtividade e padronização. Atualmente, esta versão tem suporte para gerar código
+
+#### Frontend:
+* Vue + Tailwind.
+
+#### Backend:
+* C# (Clean Architecture ou Minimal API)
+* Java
+* Python
 
 A biblioteca recebe um objeto `ProjectAbstraction` proveniente da [SEONLibImplementation](https://github.com/chevitaresebruno/SEONLibImplementation) e, a partir dele, gera toda a estrutura de pastas e arquivos do projeto frontend.
 
