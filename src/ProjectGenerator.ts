@@ -11,8 +11,8 @@ export class ProjectGenerator {
         this.project = project;
     }
 
-    public generate(): void {
-        const projectPath = path.join(process.cwd(), this.project.getProjectName());
+    public generate(projectPath: string): void {
+        // const projectPath = path.join(process.cwd(), this.project.getProjectName());
 
         if (this.project.getSpecifications().architecture instanceof SEON.VueModularArchitecture) {
             fs.mkdirSync(projectPath, { recursive: true });

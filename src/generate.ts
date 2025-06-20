@@ -2,10 +2,10 @@ import SEON from "seon-lib-implementation"
 import { ProjectGenerator } from "./ProjectGenerator.js"
 import { isAttribute, isLocalEntity, isModule, Model } from "./backend/models/model.js"
 
-export function generate(model: Model): void {
+export function generate(model: Model, target_folder: string): void {
     const project = new ProjectGenerator(translate(model))
 
-    project.generate()
+    project.generate(target_folder)
 }
 
 export function translate(model: Model): SEON.ProjectAbstraction {
