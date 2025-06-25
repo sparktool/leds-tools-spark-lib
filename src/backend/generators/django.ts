@@ -1,7 +1,7 @@
 import { Model, createPath } from "../models/model.js"
 import fs from "fs";
 
-import {django} from "./index.js"
+import { python } from "../index.js";
 
 export function generate(model: Model, target_folder: string) : void {
 
@@ -11,7 +11,7 @@ export function generate(model: Model, target_folder: string) : void {
     fs.mkdirSync(target_folder_back, {recursive:true})
 
 
-    django.generate(model,target_folder_back)
+    python.generate(model,target_folder_back)
 
 
 }
