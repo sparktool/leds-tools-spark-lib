@@ -1,6 +1,6 @@
 import { Model } from "../../models/model.js"
 import fs from "fs";
-import { generate as generateInfra } from "../../csharp-generator/cleanArchitecture-generator/generator.js"
+import { generate as generateInfra } from "../../csharp-generator/cleanArchitecture-generator/Infrastructure/generate.js"
 import { generate as generateTest } from "../../csharp-generator/cleanArchitecture-generator/DomainTest/generate.js"
 import { generate as generateWeb } from "../../csharp-generator/cleanArchitecture-generator/WebAPI/generate.js"
 import { generate as generateDomain } from "../../csharp-generator/cleanArchitecture-generator/Domain/generate.js"
