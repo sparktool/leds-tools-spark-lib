@@ -30,7 +30,7 @@ export function generateModules(model: Model, target_folder: string) : void {
       const class_name = cls.name
       const {attributes, relations} = getAttrsAndRelations(cls, relation_maps)
       
-      attributes
+      // Gera o modelo da entidade
 
       fs.writeFileSync(path.join(MODELS_PATH,`${class_name}.java`), toString(generateModel(cls, supertype_classes.has(cls), relations, package_name, imported_entities)))
       if (!cls.is_abstract){
@@ -101,13 +101,12 @@ function generateClassRepository(cls: LocalEntity, package_name: string, importe
     import org.springframework.data.repository.PagingAndSortingRepository;
     import org.springframework.data.repository.ListCrudRepository;
     import java.util.Optional;
-    import br.nemo.immigrant.ontology.entity.eo.teams.repositories.projections.IDProjection;
 
     public interface ${cls.name}Repository extends PagingAndSortingRepository<${cls.name}, Long>, ListCrudRepository<${cls.name}, Long> {
 
-      Optional<IDProjection> findByExternalId(String externalId);
+      Optional<${cls.name}> findByExternalId(String externalId);
 
-      Optional<IDProjection> findByInternalId(String internalId);
+      Optional<${cls.name}> findByInternalId(String internalId);
 
       Boolean existsByInternalId(String internalId);
     

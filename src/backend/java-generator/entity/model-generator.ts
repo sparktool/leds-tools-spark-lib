@@ -26,6 +26,7 @@ export function generateModel(cls: LocalEntity, is_supertype: boolean, relations
     import java.util.UUID;
     import java.time.LocalDate;
     import java.util.Date;
+    import java.math.BigDecimal;
 
     ${external_relations.map(relation => `import ${package_name.replace(cls.$container.name.toLowerCase(),relation.tgt.$container.name.toLowerCase())}.models.${relation.tgt.name};`).join('\n')}
     
@@ -89,7 +90,11 @@ function generateImportSuperEntity (package_name: string, entity: Entity, supert
   if (isLocalEntity(supertype)){
     return `import ${package_name.replace(entity.$container.name.toLowerCase(),generateImportEntity(supertype,importedEntities))}.models.${supertype.name};`
   }
-  return `import br.nemo.immigrant.ontology.entity.${generateImportEntity(supertype,importedEntities)}.models.${supertype.name};` 
+  const moduleImport = importedEntities.get(supertype);
+  if (moduleImport) {
+    return `import ${moduleImport.package_path}.models.${supertype.name};`
+  }
+  return `import ${generateImportEntity(supertype,importedEntities)}.models.${supertype.name};` 
 
 } 
 
@@ -102,7 +107,7 @@ function generateImportEntity (entity: Entity, importedEntities: Map<ImportedEnt
   return `${moduleImport?.library.toLocaleLowerCase()}.${entity.$container.name.toLowerCase()}`
 }
 
-function generateAttribute(attribute:Attribute, is_abstract:Boolean): Generated{
+function generateAttribute(attribute:Attribute, is_abstract:boolean): Generated{
   return expandToStringWithNL`
   ${generateUniqueCollumn(attribute)}
   ${is_abstract? `protected`: `private`} ${capitalizeString(toString(generateTypeAttribute(attribute)) ?? 'NOTYPE')} ${attribute.name};
@@ -118,11 +123,37 @@ function generateUniqueCollumn(attribute: Attribute): Generated{
 
 function generateTypeAttribute(attribute:Attribute): Generated{
 
-  if (attribute.type.toString().toLowerCase() === "date"){
-    return "LocalDate"
+  const type = attribute.type.toString().toLowerCase();
+  
+  switch(type) {
+    case "date":
+      return "LocalDate";
+    case "datetime":
+      return "LocalDateTime";
+    case "cpf":
+    case "cnpj":
+    case "email":
+    case "mobilephonenumber":
+    case "phonenumber":
+    case "zipcode":
+    case "string":
+      return "String";
+    case "boolean":
+      return "Boolean";
+    case "integer":
+      return "Integer";
+    case "decimal":
+    case "currency":
+      return "BigDecimal";
+    case "file":
+      return "byte[]";
+    case "uuid":
+      return "UUID";
+    case "void":
+      return "void";
+    default:
+      return "String"; // fallback para tipos não reconhecidos
   }
-  return attribute.type
-
 }
 
 function generateRelations(cls: LocalEntity, relations: RelationInfo[]) : Generated {

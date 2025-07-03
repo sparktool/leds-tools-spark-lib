@@ -97,7 +97,7 @@ function generateClassRepository(cls: LocalEntity, package_name: string) : Gener
 
 function generateRecord(cls: LocalEntity, package_name: string) : Generated {
 
-  var att = cls.attributes
+  let att = cls.attributes
   const superTypeRef = getRef(cls.superType);
   if (isLocalEntity(superTypeRef)) {
     att = cls.attributes.concat(superTypeRef.attributes ?? [])
@@ -106,6 +106,9 @@ function generateRecord(cls: LocalEntity, package_name: string) : Generated {
   return expandToStringWithNL`
   package ${package_name}.records;
   import java.time.LocalDate;
+  import java.time.LocalDateTime;
+  import java.math.BigDecimal;
+  import java.util.UUID;
   public record ${cls.name}Input( ${att.map(att => generateRecordAtribute(att)).join(',')} ) {
   }
   `
@@ -119,17 +122,43 @@ ${capitalizeString(toString(generateTypeAttribute(attribute))) ??'Not Type'} ${a
 
 function generateTypeAttribute(attribute:Attribute): Generated{
 
-  if (attribute.type.toString().toLowerCase() === "date"){
-    return "LocalDate"
+  const type = attribute.type.toString().toLowerCase();
+  
+  switch(type) {
+    case "date":
+      return "LocalDate";
+    case "datetime":
+      return "LocalDateTime";
+    case "cpf":
+    case "cnpj":
+    case "email":
+    case "mobilephonenumber":
+    case "phonenumber":
+    case "zipcode":
+    case "string":
+      return "String";
+    case "boolean":
+      return "Boolean";
+    case "integer":
+      return "Integer";
+    case "decimal":
+    case "currency":
+      return "BigDecimal";
+    case "file":
+      return "byte[]";
+    case "uuid":
+      return "UUID";
+    case "void":
+      return "void";
+    default:
+      return "String"; // fallback para tipos não reconhecidos
   }
-  return attribute.type
-
 }
 
 
 function generateClassController(cls: LocalEntity, package_name: string) : Generated {
 
-  var att = cls.attributes
+  let att = cls.attributes
   const superTypeRef = getRef(cls.superType);
   if (isLocalEntity(superTypeRef)) {
     att = cls.attributes.concat(superTypeRef.attributes ?? [])
