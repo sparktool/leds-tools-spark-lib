@@ -10,7 +10,6 @@ export function generate(model: Model, target_folder: string) : void {
 
 function generateProjectsln(model: Model) : string {
     return expandToStringWithNL`
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
@@ -37,5 +36,5 @@ Global
 		SolutionGuid = {SOLUTION GUID}
 	EndGlobalSection
 EndGlobal
-    `
+`
 }
