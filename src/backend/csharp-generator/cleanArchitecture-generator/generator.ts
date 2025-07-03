@@ -6,6 +6,8 @@ import { generate as generateWeb } from "./WebAPI/generate.js"
 import { generate as generateDomain } from "./Domain/generate.js"
 import { generate as generateApplication } from "./Application/generate.js"
 import { generate as generateInfraTest } from "./InfraTest/generate.js"
+import { generate as generateProject } from "./project-generator.js"
+import { generate as generateDocker } from "./docker-generator.js"
 
 export function generate(model: Model, target_folder: string) : void {
     if (!model || !model.configuration || !model.configuration.name) {
@@ -32,4 +34,10 @@ export function generate(model: Model, target_folder: string) : void {
     generateDomain(model, domain_folder);
     generateApplication(model, application_folder);
     generateInfraTest(model, infra_test_folder);
+    
+    // Gerar arquivo .sln (Solution)
+    generateProject(model, target_folder);
+    
+    // Gerar arquivos Docker
+    generateDocker(model, target_folder);
 }
