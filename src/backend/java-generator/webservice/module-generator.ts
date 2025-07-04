@@ -20,7 +20,7 @@ export function generateModules(model: Model, target_folder: string) : void {
 
   for(const mod of modules) {
     
-    const package_name      = `${package_path}.service.${model.configuration?.name?.toLocaleLowerCase()}.${mod.name.toLowerCase()}`
+    const package_name      = `${package_path}.service.${model.configuration?.name}.${mod.name.toLowerCase()}`
     const MODULE_PATH       = createPath(target_folder, "src/main/java/", package_name.replaceAll(".","/"))
     const REPOSITORIES_PATH = createPath(MODULE_PATH, 'repositories')
     const CONTROLLERS_PATH = createPath(MODULE_PATH, 'controllers') 
@@ -80,7 +80,7 @@ function applicationGenerator(path_package: string, configuration: Configuration
 
 function generateClassRepository(cls: LocalEntity, package_name: string) : Generated {
   return expandToStringWithNL`
-    package ${package_name}.repositories;
+    package ${package_name.toLowerCase()}.repositories;
 
     import ${package_name.replace("service","entity")}.models.${cls.name};
     import ${package_name.replace("service","entity")}.repositories.${cls.name}Repository;
@@ -97,15 +97,18 @@ function generateClassRepository(cls: LocalEntity, package_name: string) : Gener
 
 function generateRecord(cls: LocalEntity, package_name: string) : Generated {
 
-  var att = cls.attributes
+  let att = cls.attributes
   const superTypeRef = getRef(cls.superType);
   if (isLocalEntity(superTypeRef)) {
     att = cls.attributes.concat(superTypeRef.attributes ?? [])
   }
 
   return expandToStringWithNL`
-  package ${package_name}.records;
+  package ${package_name.toLowerCase()}.records;
   import java.time.LocalDate;
+  import java.time.LocalDateTime;
+  import java.math.BigDecimal;
+  import java.util.UUID;
   public record ${cls.name}Input( ${att.map(att => generateRecordAtribute(att)).join(',')} ) {
   }
   `
@@ -119,28 +122,54 @@ ${capitalizeString(toString(generateTypeAttribute(attribute))) ??'Not Type'} ${a
 
 function generateTypeAttribute(attribute:Attribute): Generated{
 
-  if (attribute.type.toString().toLowerCase() === "date"){
-    return "LocalDate"
+  const type = attribute.type.toString().toLowerCase();
+  
+  switch(type) {
+    case "date":
+      return "LocalDate";
+    case "datetime":
+      return "LocalDateTime";
+    case "cpf":
+    case "cnpj":
+    case "email":
+    case "mobilephonenumber":
+    case "phonenumber":
+    case "zipcode":
+    case "string":
+      return "String";
+    case "boolean":
+      return "Boolean";
+    case "integer":
+      return "Integer";
+    case "decimal":
+    case "currency":
+      return "BigDecimal";
+    case "file":
+      return "byte[]";
+    case "uuid":
+      return "UUID";
+    case "void":
+      return "void";
+    default:
+      return "String"; // fallback para tipos não reconhecidos
   }
-  return attribute.type
-
 }
 
 
 function generateClassController(cls: LocalEntity, package_name: string) : Generated {
 
-  var att = cls.attributes
+  let att = cls.attributes
   const superTypeRef = getRef(cls.superType);
   if (isLocalEntity(superTypeRef)) {
     att = cls.attributes.concat(superTypeRef.attributes ?? [])
   }
 
   return expandToStringWithNL`
-    package ${package_name}.controllers;
+    package ${package_name.toLowerCase()}.controllers;
 
     import ${package_name.replace("service","entity")}.models.${cls.name};
     import ${package_name.replace("service","entity")}.repositories.${cls.name}Repository;
-    import ${package_name}.records.${cls.name}Input;
+    import ${package_name.toLowerCase()}.records.${cls.name}Input;
 
     import org.springframework.beans.factory.annotation.Autowired;
     
