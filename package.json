@@ -1,0 +1,96 @@
+{
+  "name": "leds-spark-lib",
+  "version": "1.10.0",
+  "description": "Biblioteca de geração de código",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:github": "vitest run",
+    "commit": "cz",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && npm publish",
+    "publish:github": "npm publish --access public",
+    "publish:public": "npm run build && npm publish --access public"
+  },
+  "dependencies": {
+    "seon-lib-implementation": "^0.0.6",
+    "vue": "^3.5.16"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.4",
+    "@types/node": "^22.15.30",
+    "@types/vue": "^1.0.31",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "langium": "^3.5.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3",
+    "vitest": "^2.1.9"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "keywords": [
+    "typescript",
+    "lib",
+    "spark",
+    "leds",
+    "generator",
+    "codegen"
+  ],
+  "author": "Equipe Spark",
+  "contributors": [
+    {
+      "name": "Arthur Valentim",
+      "url": "https://github.com/Arthur-Valentim"
+    },
+    {
+      "name": "Bruno Chevitarese",
+      "url": "https://github.com/chevitaresebruno"
+    },
+    {
+      "name": "Caio Chiabai",
+      "url": "https://github.com/CaioChiabai"
+    },
+    {
+      "name": "Diego Rangel",
+      "url": "https://github.com/diegobrangel"
+    },
+    {
+      "name": "Guilherme Borges",
+      "url": "https://github.com/guilhermbc"
+    },
+    {
+      "name": "Henrique Lima",
+      "url": "https://github.com/henriqk0"
+    },
+    {
+      "name": "Lucas Bruno",
+      "url": "https://github.com/lucasbruno-devdog"
+    },
+    {
+      "name": "Lucas Codeco",
+      "url": "https://github.com/LucasCodeco14"
+    },
+    {
+      "name": "Murilo Dias",
+      "url": "https://github.com/MuriloDias12"
+    },
+    {
+      "name": "Nicolas Botelho",
+      "url": "https://github.com/Nicolas-Botelho"
+    }
+  ],
+  "license": "ISC"
+}

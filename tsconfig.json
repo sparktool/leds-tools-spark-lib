@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",                          // Gera código moderno, compatível com Node 16+
+    "module": "node16",                          // Suporte a módulos modernos
+    "moduleResolution": "node16",                  // Resolve módulos como Node.js
+    "lib": [
+            "ESNext",
+            "DOM",
+            "WebWorker"
+        ],
+    "outDir": "./dist",                          // Saída dos arquivos compilados
+    "rootDir": "./src",                          // Origem do código
+    "baseUrl": "./",
+    "declaration": true,                         // Gera arquivos .d.ts (definições de tipos)
+    "declarationMap": true,                      // Gera map dos .d.ts (opcional, bom pra debug)
+    "sourceMap": true,                           // Gera .map dos .js
+    "strict": true,                              // Ativa todas as verificações estritas
+    "esModuleInterop": true,                     // Permite importações compatíveis com CommonJS
+    "forceConsistentCasingInFileNames": true,    // Evita bugs em sistemas case-sensitive
+    "skipLibCheck": true                         // Ignora checagem de tipos de libs externas
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "tests"]
+}
