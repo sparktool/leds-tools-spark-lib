@@ -16,7 +16,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -47,8 +46,7 @@ ENTRYPOINT ["dotnet", "${model.configuration?.name}.WebAPI.dll"]`
   }
 
   function generatedockercomposedcproj(model: Model): string {
-    return expandToStringWithNL`
-<?xml version="1.0" encoding="utf-8"?>
+    return `<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
@@ -127,7 +125,6 @@ services:
       - backend
     ports:
       - "8080:8080"
-      - "8081:8081"
     depends_on:
       - sqlserver
     environment:
@@ -163,11 +160,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
     ports:
       - "8080"
-      - "8081"
     volumes:
-      - \${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - \${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro`
+      - \${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro`
 }

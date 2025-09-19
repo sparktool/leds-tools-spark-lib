@@ -136,6 +136,9 @@ function generateTypeAttribute(attribute: Attribute): Generated {
   if (attribute.type.toString().toLowerCase() === 'integer') {
     return 'int'
   }
+  if (attribute.type.toString().toLowerCase() === 'boolean') {
+    return 'bool'
+  }
   return attribute.type
 }
 

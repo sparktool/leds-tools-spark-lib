@@ -1,6 +1,6 @@
 import { LocalEntity, Module, isLocalEntity, ident_size } from "../../../../models/model.js";
 
-const ident = ident_size
+const ident = ' '.repeat(ident_size)
 
 export function generateAdmin(m: Module) : string {
     const non_abstract_entities = m.elements.filter(isLocalEntity).filter(e => !e.is_abstract)

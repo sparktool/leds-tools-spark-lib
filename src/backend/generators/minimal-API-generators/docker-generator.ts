@@ -43,8 +43,7 @@ function generateDockerfile(model : Model) : string {
   }
 
   function generatedockercomposedcproj(model: Model): string {
-    return expandToStringWithNL`
-<?xml version="1.0" encoding="utf-8"?>
+    return expandToStringWithNL`<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
