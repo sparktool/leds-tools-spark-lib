@@ -782,7 +782,7 @@ env:
   PIP_CACHE_DIR: "${GITHUB_WORKSPACE}/.cache/pip"
   SONAR_USER_HOME: "${GITHUB_WORKSPACE}/.sonar" # Defines the location of the analysis task cache
   GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-  IMAGE_REGISTRY_NAME: "${}"
+  IMAGE_REGISTRY_NAME: "${CI_REGISTRY_IMAGE}"
   IMAGE_TAG: "${GITHUB_REF}"
   # Tell 'docker:dind' to enable TLS (recommended)
   # and generate certificates in the specified directory.
@@ -839,15 +839,15 @@ jobs:
       - run: |
           which ssh-agent || (apt-get update -qy && apt-get install openssh-client git -qqy)
           eval "$(ssh-agent -s)"
-          echo "\${GITLAB_SSH_PRIVATE_KEY}" | tr -d '\\r' | ssh-add - > /dev/null
+          echo "${GITHUB_SSH_PRIVATE_KEY}" | tr -d '\\r' | ssh-add - > /dev/null
           mkdir ~/.ssh
           chmod 700 ~/.ssh
-          echo "$GITLAB_SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa.pub
+          echo "$GITHUB_SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
           [[ -f /.dockerenv ]] && echo -e "Host *\\n\\tStrictHostKeyChecking no\\n\\n" > ~/.ssh/config
           pip install -U commitizen
       - run: |
           git remote set-url origin ${GITHUB_WORKSPACE}
-          git config --global user.email "${USERNAME}" && git config --global user.name "${GITLAB_USERNAME}"
+          git config --global user.email "${GIT_EMAIL}" && git config --global user.name "${GIT_USERNAME}"
           'exists=\`git show-ref refs/heads/main\` && if [ -n "$exists" ]; then git branch -D main; fi'
           git checkout -b main
           echo "====== Bumping version ======"
@@ -868,7 +868,7 @@ jobs:
           echo "===========Building stage Homol image $IMAGE_REGISTRY_NAME:$TAG==========="
           docker-compose -f homol.yml build
       - run: |
-          docker login registry.gitlab.com --username=$USERNAME --password=$PASSWORD
+          docker login registry.gitlab.com --username=$GITLAB_REGISTRY_USERNAME --password=$GITLAB_REGISTRY_PASSWORD
           docker push $IMAGE_REGISTRY_NAME:$TAG
 
   deploy_dev:
@@ -950,16 +950,15 @@ jobs:
           scp -o StrictHostKeyChecking=no prod.yml $MACHINE_HOST_PROD:~/
           scp -o StrictHostKeyChecking=no conf.d/local.conf $MACHINE_HOST_PROD:~/conf.d/
           ssh -o StrictHostKeyChecking=no $MACHINE_HOST_PROD "sudo docker login registry.gitlab.com --username=$USERNAME --password=$PASSWORD &&
-                sudo docker pull $IMAGE_REGISTRY_NAME:$TAG &&
-                export IMAGE_REGISTRY_NAME=$IMAGE_REGISTRY_NAME &&
-                export TAG=$TAG && docker-compose -f prod.yml stop &&
-                sudo docker container prune -f && docker-compose -f prod.yml up -d"
+          sudo docker pull $IMAGE_REGISTRY_NAME:$TAG &&
+          export IMAGE_REGISTRY_NAME=$IMAGE_REGISTRY_NAME &&
+          export TAG=$TAG && docker-compose -f prod.yml stop &&
+          sudo docker container prune -f && docker-compose -f prod.yml up -d"
       - uses: actions/upload-artifact@v4
         with:
           name: deploy-dev-artifacts
           path: |
             dist/*.whl
-
     `
 }
 
