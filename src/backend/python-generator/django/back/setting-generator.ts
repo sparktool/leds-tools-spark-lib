@@ -21,7 +21,7 @@ export function generate(app: Model, target_folder: string) : void {
 
     // Git Stuff
     fs.writeFileSync(path.join(BASE_PATH, ".gitignore"), toString(generateGitignore()))
-    fs.writeFileSync(path.join(BASE_PATH, ".github", "workflows", "ci.yml"), toString(generateCI()))
+    fs.writeFileSync(path.join(BASE_PATH, ".gitlab-ci.yml"), toString(generateCI()))
     fs.writeFileSync(path.join(BASE_PATH, "sonar-project.properties"), toString(generateSonarProperties()))
 
     // Docker Stuff
@@ -770,195 +770,182 @@ function generateGitignore() : Generated {
 
 function generateCI() : Generated {
     return expandToStringWithNL`
-name: CI/CD Pipeline
+        variables:
+            PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+            SONAR_USER_HOME: "\${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+            GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
+            IMAGE_REGISTRY_NAME: $CI_REGISTRY_IMAGE
+            IMAGE_TAG: $CI_COMMIT_REF_SLUG
+            # Tell 'docker:dind' to enable TLS (recommended)
+            # and generate certificates in the specified directory.
+            DOCKER_TLS_CERTDIR: "/certs"
 
-on:
-  push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main]
+        cache:
+            paths:
+                - .cache/pip
+        stages:
+            - lint-test
+            - sonarcloud-check
+            - bump
+            - build
+            - deploy
+            - notification
 
-env:
-  PIP_CACHE_DIR: "${GITHUB_WORKSPACE}/.cache/pip"
-  SONAR_USER_HOME: "${GITHUB_WORKSPACE}/.sonar" # Defines the location of the analysis task cache
-  GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
-  IMAGE_REGISTRY_NAME: "${CI_REGISTRY_IMAGE}"
-  IMAGE_TAG: "${GITHUB_REF}"
-  # Tell 'docker:dind' to enable TLS (recommended)
-  # and generate certificates in the specified directory.
-  DOCKER_TLS_CERTDIR: "/certs"
+        lint-test:
+            image: python:3.10-alpine
+            stage: lint-test
+            cache:
+                paths:
+                    - .cache/pip
 
-jobs:
-  lint-test:
-    runs-on: ubuntu-latest
-    container:
-      image: python:3.10-alpine
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        id: cache-pip-lint
-        with:
-          path: .cache/pip
-          key: "${{ github.job }}-cache-pip-lint"
-      - run: |
-          python -V
-          python -m venv venv
-          source venv/bin/activate
-          pip install flake8 pytest
-      - run: |
-          echo "====== Running lint ======"
-          flake8
-          echo "====== Running tests ======"
-          pytest
+            before_script:
+                - python -V
+                - python -m venv venv
+                - source venv/bin/activate
+                - pip install flake8 pytest
+            script:
+                - echo "====== Running lint ======"
+                - flake8
+                - echo "====== Running tests ======"
+                - pytest
+            only:
+                - dev
+                - main
 
-  sonarcloud-check:
-    runs-on: ubuntu-latest
-    container:
-      image: sonarsource/sonar-scanner-cli:latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        id: cache-sonar
-        with:
-          key: "${{ github.job }}"
-          path: .sonar/cache
-      - run: |
-          sonar-scanner -X
+        sonarcloud-check:
+            image:
+                name: sonarsource/sonar-scanner-cli:latest
+                entrypoint: [""]
+            stage: sonarcloud-check
+            cache:
+                key: "\${CI_JOB_NAME}"
+                paths:
+                    - .sonar/cache
+            script:
+                - sonar-scanner -X
+            only:
+                - merge_requests
+                - main
+                - dev
 
-  bump:
-    runs-on: ubuntu-latest
-    container:
-      image: python:3.10-slim
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        id: cache-version
-        with:
-          key: "cache-version"
-          path: "version"
-      - run: |
-          which ssh-agent || (apt-get update -qy && apt-get install openssh-client git -qqy)
-          eval "$(ssh-agent -s)"
-          echo "${GITHUB_SSH_PRIVATE_KEY}" | tr -d '\\r' | ssh-add - > /dev/null
-          mkdir ~/.ssh
-          chmod 700 ~/.ssh
-          echo "$GITHUB_SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
-          [[ -f /.dockerenv ]] && echo -e "Host *\\n\\tStrictHostKeyChecking no\\n\\n" > ~/.ssh/config
-          pip install -U commitizen
-      - run: |
-          git remote set-url origin ${GITHUB_WORKSPACE}
-          git config --global user.email "${GIT_EMAIL}" && git config --global user.name "${GIT_USERNAME}"
-          'exists=\`git show-ref refs/heads/main\` && if [ -n "$exists" ]; then git branch -D main; fi'
-          git checkout -b main
-          echo "====== Bumping version ======"
-          cz bump --yes
-          git push origin main:$(GITHUB_REF)
-          TAG=$(head -n 1 VERSION)
-          echo $TAG > version
-          git push origin $TAG
+        bump:
+            image: python:3.10-slim
+            stage: bump
+            cache:
+                paths:
+                    - version
+            before_script:
+                - "which ssh-agent || ( apt-get update -qy && apt-get install openssh-client git -qqy )"
+                - eval \`ssh-agent -s\`
+                - echo "\${GITLAB_SSH_PRIVATE_KEY}" | tr -d '\\r' | ssh-add - > /dev/null
+                - mkdir -p ~/.ssh
+                - chmod 700 ~/.ssh
+                - echo "$GITLAB_SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa.pub
+                - '[[ -f /.dockerenv ]] && echo -e "Host *\\n\\tStrictHostKeyChecking no\\n\\n" > ~/.ssh/config'
+                - pip install -U commitizen
+            script:
+                - git remote set-url origin $CI_PROJECT_PATH
+                - git config --global user.email "\${USERNAME}" && git config --global user.name "\${GITLAB_USERNAME}"
+                - 'exists=\`git show-ref refs/heads/main\` && if [ -n "$exists" ]; then git branch -D main; fi'
+                - git checkout -b main
+                - echo "====== Bumping version ======"
+                - cz bump --yes
+                - git push origin main:$CI_COMMIT_REF_NAME
+                - TAG=$(head -n 1 VERSION)
+                - echo $TAG > version
+                - git push origin $TAG
+            only:
+                - main
 
-  build_dev:
-    runs-on: ubuntu-latest
-    container:
-      image: docker/compose:1.29.2
-    steps:
-      - run: |
-          export TAG=dev
-          touch .env-onboarding
-          echo "===========Building stage Homol image $IMAGE_REGISTRY_NAME:$TAG==========="
-          docker-compose -f homol.yml build
-      - run: |
-          docker login registry.gitlab.com --username=$GITLAB_REGISTRY_USERNAME --password=$GITLAB_REGISTRY_PASSWORD
-          docker push $IMAGE_REGISTRY_NAME:$TAG
+        build_dev:
+            image: docker/compose:1.29.2
+            stage: build
+            services:
+                - docker:dind
+            before_script:
+                - export TAG=dev
+                - touch .env-onboarding
+                - echo "===========Building stage Homol image $IMAGE_REGISTRY_NAME:$TAG==========="
+                - docker-compose -f homol.yml build
+            script:
+                - docker login registry.gitlab.com --username=$USERNAME --password=$PASSWORD
+                - docker push $IMAGE_REGISTRY_NAME:$TAG
+            only:
+                - dev
 
-  deploy_dev:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        id: cache-version
-        with:
-          key: "cache-version"
-          path: "version"
-      - run: |
-          apt-get update -qq
-          "which ssh-agent || ( apt-get install -qq openssh-client )"
-          eval $(ssh-agent -s)
-          echo "$SSH_PRIVATE_KEY_DEV" | tr -d '\\r' | ssh-add -
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          export TAG=dev
-      - run: |
-          apt-get update -qq
-          "which ssh-agent || ( apt-get install -qq openssh-client )"
-          eval $(ssh-agent -s)
-          echo "$SSH_PRIVATE_KEY_DEV" | tr -d '\\r' | ssh-add -
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          export TAG=dev
-      - run: |
-          # scp -o StrictHostKeyChecking=no homol.yml $MACHINE_HOST_DEV:~/
-          scp -o StrictHostKeyChecking=no conf.d/local.conf $MACHINE_HOST_DEV:~/conf.d/
-          ssh -o StrictHostKeyChecking=no $MACHINE_HOST_DEV "sudo docker login registry.gitlab.com --username=$USERNAME --password=$PASSWORD &&
+        deploy_dev:
+            image: ubuntu:latest
+            stage: deploy
+            artifacts:
+                paths:
+                    - dist/*.whl
+            before_script:
+                - apt-get update -qq
+                - "which ssh-agent || ( apt-get install -qq openssh-client )"
+                - eval $(ssh-agent -s)
+                - echo "$SSH_PRIVATE_KEY_DEV" | tr -d '\\r' | ssh-add -
+                - mkdir -p ~/.ssh
+                - chmod 700 ~/.ssh
+                - export TAG=dev
+            script:
+                # - scp -o StrictHostKeyChecking=no homol.yml $MACHINE_HOST_DEV:~/
+                - scp -o StrictHostKeyChecking=no conf.d/local.conf $MACHINE_HOST_DEV:~/conf.d/
+                - ssh -o StrictHostKeyChecking=no $MACHINE_HOST_DEV "sudo docker login
+                registry.gitlab.com --username=$USERNAME --password=$PASSWORD &&
                 sudo docker pull $IMAGE_REGISTRY_NAME:$TAG &&
                 export IMAGE_REGISTRY_NAME=$IMAGE_REGISTRY_NAME &&
                 export TAG=$TAG && docker-compose -f homol.yml stop &&
                 sudo docker container prune -f && docker-compose -f homol.yml up -d"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: deploy-dev-artifacts
-          path: |
-            dist/*.whl
+            only:
+                - dev
 
-  build_prod:
-    runs-on: ubuntu-latest
-    container:
-      image: docker/compose:1.29.2
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        id: cache-build-prod
-        with:
-          key: "${{ github.job }}"
-          path: version
-      - run: |
-          export TAG=$(cat version)
-          touch .env
-          echo "===========Building stage Prod image $IMAGE_REGISTRY_NAME:$TAG==========="
-          docker-compose -f prod.yml build
-      - run: |
-          docker login registry.gitlab.com --username=$USERNAME --password=$PASSWORD
-          docker push $IMAGE_REGISTRY_NAME:$TAG
+        build_prod:
+            image: docker/compose:1.29.2
+            stage: build
+            services:
+                - docker:dind
+            cache:
+                paths:
+                    - version
+            before_script:
+                - export TAG=$(cat version)
+                - touch .env
+                - echo "===========Building stage Prod image $IMAGE_REGISTRY_NAME:$TAG==========="
+                - docker-compose -f prod.yml build
+            script:
+                - docker login registry.gitlab.com --username=$USERNAME --password=$PASSWORD
+                - docker push $IMAGE_REGISTRY_NAME:$TAG
+            only:
+                - main
 
-  deploy_main:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        id: cache-version
-        with:
-          key: "cache-version"
-          path: "version"
-      - run: |
-          apt-get update -qq
-          "which ssh-agent || ( apt-get install -qq openssh-client )"
-          eval $(ssh-agent -s)
-          echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\\r' | ssh-add -
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          export TAG=$(cat version)
-      - run: |
-          scp -o StrictHostKeyChecking=no prod.yml $MACHINE_HOST_PROD:~/
-          scp -o StrictHostKeyChecking=no conf.d/local.conf $MACHINE_HOST_PROD:~/conf.d/
-          ssh -o StrictHostKeyChecking=no $MACHINE_HOST_PROD "sudo docker login registry.gitlab.com --username=$USERNAME --password=$PASSWORD &&
-          sudo docker pull $IMAGE_REGISTRY_NAME:$TAG &&
-          export IMAGE_REGISTRY_NAME=$IMAGE_REGISTRY_NAME &&
-          export TAG=$TAG && docker-compose -f prod.yml stop &&
-          sudo docker container prune -f && docker-compose -f prod.yml up -d"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: deploy-dev-artifacts
-          path: |
-            dist/*.whl
+        deploy_main:
+            image: ubuntu:latest
+            stage: deploy
+            artifacts:
+                paths:
+                    - dist/*.whl
+            cache:
+                paths:
+                    - version
+            before_script:
+                - apt-get update -qq
+                - "which ssh-agent || ( apt-get install -qq openssh-client )"
+                - eval $(ssh-agent -s)
+                - echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\\r' | ssh-add -
+                - mkdir -p ~/.ssh
+                - chmod 700 ~/.ssh
+                - export TAG=$(cat version)
+            script:
+                - scp -o StrictHostKeyChecking=no prod.yml $MACHINE_HOST_PROD:~/
+                - scp -o StrictHostKeyChecking=no conf.d/local.conf $MACHINE_HOST_PROD:~/conf.d/
+                - ssh -o StrictHostKeyChecking=no $MACHINE_HOST_PROD "sudo docker login
+                registry.gitlab.com --username=$USERNAME --password=$PASSWORD &&
+                sudo docker pull $IMAGE_REGISTRY_NAME:$TAG &&
+                export IMAGE_REGISTRY_NAME=$IMAGE_REGISTRY_NAME &&
+                export TAG=$TAG && docker-compose -f prod.yml stop &&
+                sudo docker container prune -f && docker-compose -f prod.yml up -d"
+            only:
+                - main
     `
 }
 
