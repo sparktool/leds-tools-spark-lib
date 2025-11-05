@@ -22,7 +22,7 @@ import { generate as srcGenerator } from "./src/generate.js";
 /**
  * Main frontend generator function
  * 
- * Creates a complete Vue.js frontend application based on the provided SEON project abstraction.
+ * Creates a complete Vue.js frontend application based on the provided SEON project abstraction (SEON = "Translator").
  * 
  * @param project_abstraction - Contains the project structure and metadata
  *                             Extracted from the .spark file, includes:
