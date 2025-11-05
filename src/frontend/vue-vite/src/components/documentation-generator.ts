@@ -1,14 +1,9 @@
 import fs from "fs";
 import { expandToString } from "../../../../util/template-string.js";
-import { createPath } from "../../../../util/generator-utils.js";
 import path from "path";
 import SEON from "seon-lib-implementation";
 
 export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
-    const components_folder = createPath(target_folder, "src", "components");
-    
-    fs.mkdirSync(components_folder, { recursive: true });
-    
     fs.writeFileSync(path.join(target_folder, 'DataTable.vue'), generateDataTable());
     fs.writeFileSync(path.join(target_folder, 'Card.vue'), generateCard());
     fs.writeFileSync(path.join(target_folder, 'GenericTextInput.vue'), generateGenericTextInpput());
@@ -20,50 +15,17 @@ export function generate(project_abstraction: SEON.ProjectAbstraction, target_fo
 function generateDataTable() : string {
     return expandToString`
 <script setup lang="ts">
-/**
- * @component DataTable
- * @description A reusable data table component that displays data in a tabular format with customizable headers
- * and automatic column generation based on data structure.
- *
- * @example
- * <template>
- *   <DataTable 
- *     :items="myData"
- *     :headers="[
- *       { title: 'Name', value: 'name' },
- *       { title: 'Age', value: 'age' }
- *     ]"
- *   />
- * </template>
- */
-
 import { computed, reactive, ref } from 'vue'
 
-/**
- * @interface DataTableHeader
- * @description Defines the structure for table column headers
- */
 interface DataTableHeader {
-  /** The display title of the column */
-  title: string;
-  /** The property key to access the data for this column */
-  value: string;
+  title: string; // titulo da coluna
+  value: string; // valor da coluna
 }
 
-/** 
- * @type {DataTableItem}
- * @description Represents a single row item in the data table
- */
 type DataTableItem = Record<string, string | number>
 
-/**
- * @interface DataTableProps
- * @description Component props definition
- */
 interface DataTableProps {
-  /** Array of data items to display in the table */
   items: DataTableItem[]
-  /** Optional array of column headers. If not provided, headers will be auto-generated from data */
   headers?: DataTableHeader[]
 }
 
@@ -205,72 +167,30 @@ const excluir = () => {
       </div>
     </div>
   </div>
-</template>`
+</template>
+`
 }
 
 
 function generateCard() : string {
     return expandToString`
-<script setup lang="ts">
-/**
- * @component Card
- * @description A versatile card component that provides a consistent container with padding, border, and shadow.
- * Uses slot to allow flexible content placement within the card.
- *
- * @slot default - The default slot for card content
- *
- * @example
- * <template>
- *   <Card>
- *     <h2>Card Title</h2>
- *     <p>Card content goes here</p>
- *   </Card>
- * </template>
- */
-</script>
-
 <template>
   <div class="p-3 border-2 rounded-md border-zinc-500 shadow-md">
     <slot />
   </div>
-</template>`
+</template>
+`
 }
 
 
 function generateGenericTextInpput() : string {
     return expandToString`
 <script setup lang="ts">
-/**
- * @component GenericTextInput
- * @description A reusable text input component that supports different types and variants.
- * Features v-model support, placeholder text, and error state styling.
- *
- * @emits keyupEnter - Emitted when the enter key is pressed while the input is focused
- *
- * @example
- * <template>
- *   <GenericTextInput
- *     v-model="myValue"
- *     type="password"
- *     placeholder="Enter password"
- *     variant="error"
- *     @keyup-enter="handleEnter"
- *   />
- * </template>
- */
-
 import { computed } from 'vue'
 
-/**
- * @interface GenericTextInputProps
- * @description Props definition for the GenericTextInput component
- */
 export interface GenericTextInputProps {
-  /** Input type - can be either text or password */
   type?: 'text' | 'password';
-  /** Placeholder text shown when input is empty */
   placeholder?: string;
-  /** Visual variant of the input - default or error state */
   variant?: 'error' | 'default';
 }
 
@@ -308,38 +228,20 @@ const emitEnter = () => {
     :placeholder="placeholder"
     @keyup.enter="emitEnter"
   />
-</template>`
+</template>
+`
 }
 
 
 function generatePButton(): string {
     return expandToString`
+<!-- P de 'pretty', para ser curto e n conflitar com button nativo-->
 <script setup lang="ts">
-/**
- * @component PButton
- * @description A styled button component ('P' stands for 'Pretty'). 
- * Provides consistent styling and variant support while avoiding conflicts with native button.
- * 
- * @props {Object} props
- * @prop {('default'|'error')} [variant='default'] - Visual style variant of the button
- * 
- * @slot default - The button's content
- * 
- * @example
- * <template>
- *   <PButton variant="error">
- *     Delete Item
- *   </PButton>
- * </template>
- */
 import { computed } from 'vue';
 
-interface PButtonProps {
-  /** Visual style variant of the button */
+const props = withDefaults(defineProps<{
   variant?: 'default' | 'error'
-}
-
-const props = withDefaults(defineProps<PButtonProps>(), {
+}>(), {
   variant: 'default'
 })
 
@@ -359,7 +261,8 @@ const className = computed(() => {
   >
     <slot />
   </button>
-</template>` 
+</template>
+` 
 }
 
 

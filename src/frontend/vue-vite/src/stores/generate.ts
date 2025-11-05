@@ -1,13 +1,64 @@
+/**
+ * Stores Generator Module
+ * 
+ * This module generates Pinia store modules that manage application state
+ * across components. It creates stores for authentication, UI state, and
+ * other global application data management needs.
+ * 
+ * Key Features:
+ * - Authentication state management (auth.ts)
+ * - UI state management (ui.ts)
+ * - Cookie-based session handling
+ * - Reactive state using Vue's composition API
+ * 
+ * Generated Files:
+ * - auth.ts: Authentication and session management store
+ * - ui.ts: UI state and interaction management store
+ */
+
 import fs from "fs"
 import { expandToString } from "../../../../util/template-string.js";
 import path from "path"
 import SEON from "seon-lib-implementation";
 
+/**
+ * Main store generator function
+ * 
+ * Creates Pinia store modules for managing application state.
+ * Each store module handles a specific aspect of the application's
+ * global state management needs.
+ * 
+ * @param project_abstraction - Project metadata for customizing stores
+ * @param target_folder - Directory where store files will be saved
+ * 
+ * Generated Structure:
+ * stores/
+ * ├── auth.ts    - Authentication and session store
+ * └── ui.ts      - UI state management store
+ */
 export function generate(project_abstraction: SEON.ProjectAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, 'auth.ts'), generateAuth(project_abstraction, target_folder))
     fs.writeFileSync(path.join(target_folder, 'ui.ts'), generateUi(project_abstraction, target_folder))
 }
 
+/**
+ * Generates the authentication store module
+ * 
+ * Creates a Pinia store that handles user authentication state and session
+ * management. The store uses Vue's composition API and cookie-based session
+ * storage for persistent authentication.
+ * 
+ * Features:
+ * - User session management
+ * - Token-based authentication
+ * - Cookie storage for persistence
+ * - Login/logout functionality
+ * - Session timeout handling
+ * 
+ * @param project_abstraction - Project metadata for auth customization
+ * @param target_folder - Directory where the auth store will be saved
+ * @returns {string} Authentication store module content
+ */
 function generateAuth(project_abstraction: SEON.ProjectAbstraction, target_folder: string): string {
     const classList : SEON.ClassAbstraction[] = []
 
@@ -70,6 +121,29 @@ export const useAuthStore = defineStore('auth', () => {
 `
 }
 
+/**
+ * Generates the UI state management store module
+ * 
+ * Creates a Pinia store that manages global UI state such as alerts,
+ * sidebar visibility, and other UI-related state. Implements a split
+ * store pattern with private and public state management.
+ * 
+ * Features:
+ * - Alert message queue management
+ * - Sidebar visibility state
+ * - Private state implementation
+ * - Type-safe interfaces
+ * - Vuetify integration
+ * 
+ * Implementation Notes:
+ * - Uses a private store pattern for internal state
+ * - Handles Vuetify snackbar integration
+ * - Provides public API for UI state management
+ * 
+ * @param project_abstraction - Project metadata for UI customization
+ * @param target_folder - Directory where the UI store will be saved
+ * @returns {string} UI store module content
+ */
 function generateUi(project_abstraction: SEON.ProjectAbstraction, target_folder: string): string {
     return expandToString`
 import { defineStore } from 'pinia'

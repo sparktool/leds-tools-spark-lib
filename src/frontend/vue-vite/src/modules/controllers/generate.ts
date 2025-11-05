@@ -1,12 +1,68 @@
+/**
+ * Module Controllers Generator
+ * 
+ * This module generates controller files that handle business logic,
+ * error handling, and user interface interactions for each entity.
+ * Controllers act as an intermediary layer between the API and views.
+ * 
+ * Features:
+ * - Error handling and user feedback
+ * - API integration wrapping
+ * - UI store integration
+ * - Type-safe operations
+ * - Consistent error messages
+ */
+
 import fs from "fs"
 import { expandToString } from "../../../../../util/template-string.js";
 import path from "path"
 import SEON from "seon-lib-implementation";
 
+/**
+ * Generates controller file for a specific class
+ * 
+ * Creates a TypeScript file containing all controller functions
+ * that wrap API calls with error handling and UI feedback.
+ * 
+ * @param project_abstraction - Project metadata
+ * @param cls - Class for which to generate controller
+ * @param target_folder - Directory where controller file will be saved
+ * 
+ * Generated Features:
+ * - CRUD operation wrappers
+ * - Error handling with Axios
+ * - UI alerts integration
+ * - Type-safe data handling
+ */
 export function generate(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction, target_folder: string) : void {
     fs.writeFileSync(path.join(target_folder, `${cls.getName().toLowerCase()}.ts`), generateController(project_abstraction, cls))
 }
 
+/**
+ * Generates the controller implementation
+ * 
+ * Creates controller functions that wrap API calls with error handling
+ * and user interface feedback. Each function handles a specific CRUD
+ * operation with proper error management and success notifications.
+ * 
+ * Features:
+ * - API function imports and renaming
+ * - UI store integration for alerts
+ * - Axios error handling
+ * - Success message display
+ * - Type-safe parameters and returns
+ * 
+ * Generated Functions:
+ * - listar{Class}: List with error handling
+ * - criar{Class}: Create with success notification
+ * - obter{Class}: Get with error handling
+ * - atualizar{Class}: Update with feedback
+ * - excluir{Class}: Delete with confirmation
+ * 
+ * @param project_abstraction - Project metadata
+ * @param cls - Class for which to generate controller code
+ * @returns {string} Complete controller implementation
+ */
 function generateController(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
     return expandToString`
 /**
