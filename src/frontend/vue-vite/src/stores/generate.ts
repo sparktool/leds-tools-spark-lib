@@ -99,6 +99,7 @@ export const useAuthStore = defineStore('auth', () => {
         maxAge:  600
       })
   }
+})
 
 /**
  * @function Async login - Logs in a user and sets session token.
@@ -125,6 +126,12 @@ export const useAuthStore = defineStore('auth', () => {
     setSessionToken(false)
     return await router.push({ name: 'login' })
   }
+
+/**
+ * @function estaLogado - Checks if a user is currently logged in.
+ * @returns {boolean} True if user is logged in, false otherwise.
+ */ 
+
   const estaLogado = () => {
     return getSessionToken()
   }
@@ -137,10 +144,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 })
 
- * @function estaLogado - Checks if a user is currently logged in.
- * @returns {boolean} True if user is logged in, false otherwise.
- * 
- */ 
+
 `
 }
 
@@ -207,10 +211,22 @@ interface UIStore {
   mostrarBarraLateral: Ref<boolean>
   
 }
+
+/** 
+ * @description useUiStore - Pinia store for managing UI state including alerts and sidebar visibility.
+ * @return {UIStore} Store with UI state and methods.
+ */
+
 export const useUiStore = defineStore('ui', () => {
   const privado = usePrivateState() as unknown as PrivateUIStore_
 
   const mensagensAlerta = computed(() => privado.mensagensAlerta)
+
+/**
+ * @description exibirAlertas - Displays multiple alert messages in the UI.
+ * @param {Snackbar[]} novasMensagens - Array of new alert messages to display.
+ * @returns {boolean} True if alerts were added successfully.
+ */
 
   const exibirAlertas = (
     novasMensagens: Snackbar[]
@@ -224,12 +240,22 @@ export const useUiStore = defineStore('ui', () => {
     return exibirAlertas([novaMsgAlerta])
   }
 
+  /**
+   * @description fecharAlerta - Closes alert messages and updates the alert queue.
+   * @param {Snackbar[]} mensagensRestantes - Remaining alert messages after closing.
+   * @returns {boolean} True if alerts were updated successfully.
+   */
+
   const fecharAlerta = (mensagensRestantes: Snackbar[]) => {
     privado.mensagensAlerta = mensagensRestantes
     return true
   }
 
   const carregando = ref(false)
+
+  /**
+   * @description mostrarBarraLateral - Reactive state for sidebar visibility.
+   */
 
   const mostrarBarraLateral = ref(true)
 
@@ -244,18 +270,7 @@ export const useUiStore = defineStore('ui', () => {
 })
 
 
- * @description exibirAlertas - Displays multiple alert messages.  
- * @params {Snackbar[]} novaMsgAlerta - New alert messages to display.
- * @returns {boolean} True if messages were added.
- * 
- * @des logout - Logs out the user and clears session token.
- * @params none
- * @returns {Promise<void>} Redirects to login page after logout.
- * 
- * @function estaLogado - Checks if a user is currently logged in.
- * @returns {boolean} True if user is logged in, false otherwise.
- * 
- */ 
+
 
 `
 }
