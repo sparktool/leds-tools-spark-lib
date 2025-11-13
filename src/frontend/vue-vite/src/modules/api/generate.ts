@@ -68,10 +68,10 @@ function generateApi(project_abstraction: SEON.ProjectAbstraction, cls: SEON.Cla
 /**
  * @description arquivo de api trata da parte de requisicao e suas configuracoes
  * @description Features:
- * - Full CRUD operation coverage
- * - Type-safe API responses
- * - Base URL configuration
- * - Admin API integration
+ * @description - Full CRUD operation coverage
+ * @description - Type-safe API responses
+ * @description - Base URL configuration
+ * @description - Admin API integration
  */
 
 import adminApi, { adminApiConfig } from '@/api/admin'
