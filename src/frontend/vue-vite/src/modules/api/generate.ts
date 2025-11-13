@@ -66,8 +66,14 @@ export function generate(project_abstraction: SEON.ProjectAbstraction, cls: SEON
 function generateApi(project_abstraction: SEON.ProjectAbstraction, cls: SEON.ClassAbstraction) : string {
     return expandToString`
 /**
- * arquivo de api trata da parte de requisicao e suas configuracoes
+ * @description arquivo de api trata da parte de requisicao e suas configuracoes
+ * @description Features:
+ * - Full CRUD operation coverage
+ * - Type-safe API responses
+ * - Base URL configuration
+ * - Admin API integration
  */
+
 import adminApi, { adminApiConfig } from '@/api/admin'
 import type {
   ${cls.getName()},
